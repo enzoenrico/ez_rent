@@ -19,7 +19,6 @@ VALUES (
         9876543210,
         'strongpass'
     );
-
 INSERT INTO Item (
         id_item,
         nome_item,
