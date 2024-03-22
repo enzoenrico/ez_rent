@@ -11,16 +11,4 @@
     } else {
         echo "Você se conectou ao banco.";
     }
-
-    $sql = "SELECT * FROM usuario";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo $row["id_usuario"];
-            echo $row["nome_usuario"];
-            echo $row["email_usuario"];
-            echo "<br>";
-        }
-    }
 ?>
