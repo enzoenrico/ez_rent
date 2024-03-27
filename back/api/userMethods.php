@@ -27,17 +27,17 @@ class User
 
 class UserMethods
 {
-    public static function getAllUsers()
+    /**
+     * This PHP function retrieves all records from the "usuario" table in a database.
+     * 
+     * @return void The `getAll` function is returning the result of a query that selects all columns from
+     * the `usuario` table in the database.
+     */
+    public static function getAll()
     {
-        require 'db.php';
+        include 'db.php';
         $result = $db->query("SELECT * FROM usuario");
-        $data = array();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-        }
-        return $data;
+        return $result;
     }
 
     /**
@@ -52,9 +52,9 @@ class UserMethods
      * the specified username is found in the database, or an `Error` object with the message 'No
      * results found' if no user is found.
      */
-    public function getUser($user): User| Error
+    public function getUser(string $user): User| Error
     {
-        require 'db.php';
+        require_once 'db.php';
         $result = $db->query("SELECT * FROM usuario WHERE nome_usuario = '$user'");
         $data = array();
         if ($result->num_rows > 0) {
@@ -81,13 +81,13 @@ class UserMethods
      */
     public static function setUser(User $user): bool
     {
-        require 'db.php';
+        require_once 'db.php';
         // echo $user->id;
         $passwd = $user->getPass();
-        $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user->telephone', '$user->name', '$user->email', '$user->telephone', '$passwd')";
-        if ($db->query($sql) === TRUE) {
+        try {
+            $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user->telephone', '$user->name', '$user->email', '$user->telephone', '$passwd')";
             return true;
-        } else {
+        } catch (\Throwable $th) {
             return false;
         }
     }
@@ -105,7 +105,7 @@ class UserMethods
      */
     public function deleteUser($id): bool
     {
-        require 'db.php';
+        require_once 'db.php';
         $sql = "DELETE FROM usuario WHERE id_usuario = '$id'";
         if ($db->query($sql) === TRUE) {
             return true;
@@ -138,7 +138,7 @@ class UserMethods
      */
     public function updateUser(User $user): bool
     {
-        require 'db.php';
+        require_once 'db.php';
         $sql = "UPDATE usuario SET nome_usuario = '$user->name', email_usuario = '$user->email', telefone_usuario = '$user->telephone' WHERE id_usuario = '$user->id'";
         if ($db->query($sql) === TRUE) {
             return true;
