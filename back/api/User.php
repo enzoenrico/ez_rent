@@ -33,7 +33,7 @@ class UserMethods
      * @return void The `getAll` function is returning the result of a query that selects all columns from
      * the `usuario` table in the database.
      */
-    public static function get_id()
+    public static function get_all()
     {
         include 'connection.php';
         $result = $db->query("SELECT * FROM usuario");
@@ -41,21 +41,15 @@ class UserMethods
     }
 
     /**
-     * This PHP function retrieves user data from a database based on the username provided and returns
-     * either a User object with the data or an Error object if no results are found.
-     * 
-     * @param user The `getUser` function you provided seems to be fetching user data from a database
-     * based on the username provided. It then creates a `User` object if the user is found, or an
-     * `Error` object if no results are found.
-     * 
-     * @return User|Error The `getUser` function is returning either a `User` object if a user with
-     * the specified username is found in the database, or an `Error` object with the message 'No
-     * results found' if no user is found.
+     * Retrieves a user by their ID.
+     *
+     * @param int $id The ID of the user to retrieve.
+     * @return User|Error The user object if found, or an error object if not found.
      */
-    public function get_user(string $user): User| Error
+    public function get_user(int $id): User| Error
     {
         include 'connection.php';
-        $result = $db->query("SELECT * FROM usuario WHERE nome_usuario = '$user'");
+        $result = $db->query("SELECT * FROM usuario WHERE id_usuario = '$id'");
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -115,31 +109,23 @@ class UserMethods
     }
 
     /**
-     * The updateUser function updates user information in a database based on the provided parameters.
+     * This PHP function updates user information in a database based on the provided User object and
+     * search ID.
      * 
-     * @param id The `id` parameter in the `updateUser` function represents the unique identifier of
-     * the user whose information you want to update in the database. It is used to specify which
-     * user's record should be updated with the new information provided in the function call.
-     * @param name The `updateUser` function you provided seems to update user information in a
-     * database. The parameters passed to the function are as follows:
-     * @param email It looks like you were about to provide the email parameter for the `updateUser`
-     * function but it got cut off. Could you please provide the email parameter so I can assist you
-     * further with the function?
-     * @param phone The parameter `` in the `updateUser` function represents the phone number of
-     * the user that you want to update in the database. It is used to update the `telefone_usuario`
-     * field in the `usuario` table with the new phone number provided.
-     * @param pass It seems like you might have missed providing the value for the `pass` parameter in
-     * the `updateUser` function. The `pass` parameter typically represents the password for the user.
-     * When calling the `updateUser` function, you should pass the user's password as an argument.
+     * @param User user Based on the provided code snippet, it seems like you are trying to update a
+     * user's information in a database. The `update_user` function takes two parameters:
+     * @param int search_id The `search_id` parameter in the `update_user` function is used to specify
+     * the unique identifier of the user in the database that you want to update. This identifier is
+     * typically the primary key of the user table, such as the user's ID.
      * 
-     * @return bool The `updateUser` function returns a boolean value. It returns `true` if the SQL
-     * query to update the user information in the database is successful, and `false` if there is an
-     * error or the query fails.
+     * @return bool The `update_user` function is returning a boolean value. It returns `true` if the
+     * SQL query to update the user information in the database is successful, and `false` if there is
+     * an error during the update process.
      */
-    public function update_user(User $user): bool
+    public function update_user(User $user, int $search_id): bool
     {
         include 'connection.php';
-        $sql = "UPDATE usuario SET nome_usuario = '$user->name', email_usuario = '$user->email', telefone_usuario = '$user->telephone' WHERE id_usuario = '$user->id'";
+        $sql = "UPDATE usuario SET nome_usuario = '$user->name', email_usuario = '$user->email', telefone_usuario = '$user->telephone' WHERE id_usuario = '$search_id'";
         if ($db->query($sql) === TRUE) {
             return true;
         } else {
