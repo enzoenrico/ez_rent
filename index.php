@@ -1,5 +1,6 @@
 <?php
 include(__DIR__ . '/front/navbar.php');
+require_once('autoload.php');
 
 ?>
 <div>
