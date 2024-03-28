@@ -1,7 +1,8 @@
 <?php 
-define('__ROOT__', dirname(dirname(__FILE__))); 
-require_once(__ROOT__.'/connection.php');
-require_once(__ROOT__.'/api/User.php');
-require_once(__ROOT__.'/api/Item.php');
-$u = new User(1, 'user', '', '');
+define('__ROOT__', dirname(__FILE__)); 
+require_once(__ROOT__.'back/connection.php');
+require_once(__ROOT__.'back/api/User.php');
+require_once(__ROOT__.'back/api/Item.php');
+
+$p = new User(1, "pedroca", "omsdjfoj@", "9320-11");
 ?>

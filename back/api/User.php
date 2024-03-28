@@ -10,7 +10,6 @@ class User
     public function __construct($id, $name, $email, $telephone)
     {
         $this->id = $id;
-        $id = 1;
         $this->name = $name;
         $this->email = $email;
         $this->telephone = $telephone;
