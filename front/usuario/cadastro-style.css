@@ -1,0 +1,16 @@
+body
+#sing-in-body {
+    margin-top: 100px;
+
+    h1 {
+        text-align: center;
+    }
+
+    .sign-in-box {
+        background-color: #212529;
+        margin: auto;
+        max-width: 500px;
+        border-radius: 15px;
+        height: 50%;
+    }
+}
