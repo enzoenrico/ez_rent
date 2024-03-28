@@ -10,16 +10,17 @@ class User
     public function __construct($id, $name, $email, $telephone)
     {
         $this->id = $id;
+        $id = 1;
         $this->name = $name;
         $this->email = $email;
         $this->telephone = $telephone;
         // $this->passwd = $passwd;
     }
-    public function setPass($passwd)
+    public function set_pass($passwd)
     {
         $this->passwd = $passwd;
     }
-    public function getPass(): string
+    public function get_pass(): string
     {
         return $this->passwd;
     }
@@ -27,17 +28,17 @@ class User
 
 class UserMethods
 {
-    public static function getAllUsers()
+    /**
+     * This PHP function retrieves all records from the "usuario" table in a database.
+     * 
+     * @return void The `getAll` function is returning the result of a query that selects all columns from
+     * the `usuario` table in the database.
+     */
+    public static function get_id()
     {
-        require 'db.php';
+        include 'connection.php';
         $result = $db->query("SELECT * FROM usuario");
-        $data = array();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-        }
-        return $data;
+        return $result;
     }
 
     /**
@@ -52,9 +53,9 @@ class UserMethods
      * the specified username is found in the database, or an `Error` object with the message 'No
      * results found' if no user is found.
      */
-    public function getUser($user): User| Error
+    public function get_user(string $user): User| Error
     {
-        require 'db.php';
+        include 'connection.php';
         $result = $db->query("SELECT * FROM usuario WHERE nome_usuario = '$user'");
         $data = array();
         if ($result->num_rows > 0) {
@@ -62,7 +63,7 @@ class UserMethods
                 $data[] = $row;
             }
             $res = new User($data['id_usuario'], $data['nome_usuario'], $data['email_usuario'], $data['telefone_usuario']);
-            $res->setPass($data['senha_usuario']);
+            $res->set_pass($data['senha_usuario']);
         } else {
             $res = new Error('No results found.');
         }
@@ -79,15 +80,15 @@ class UserMethods
      * @return bool The `setUser` function is returning a boolean value. If the SQL query to insert a
      * new user into the database is successful, it returns `true`. Otherwise, it returns `false`.
      */
-    public static function setUser(User $user): bool
+    public static function set_user(User $user): bool
     {
-        require 'db.php';
+        include 'connection.php';
         // echo $user->id;
-        $passwd = $user->getPass();
-        $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user->telephone', '$user->name', '$user->email', '$user->telephone', '$passwd')";
-        if ($db->query($sql) === TRUE) {
+        $passwd = $user->get_pass();
+        try {
+            $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user->telephone', '$user->name', '$user->email', '$user->telephone', '$passwd')";
             return true;
-        } else {
+        } catch (\Throwable $th) {
             return false;
         }
     }
@@ -103,9 +104,9 @@ class UserMethods
      * @return bool The function `deleteUser` is returning a boolean value. If the deletion query is
      * successful, it returns `true`, otherwise it returns `false`.
      */
-    public function deleteUser($id): bool
+    public function delete_user($id): bool
     {
-        require 'db.php';
+        include 'connection.php';
         $sql = "DELETE FROM usuario WHERE id_usuario = '$id'";
         if ($db->query($sql) === TRUE) {
             return true;
@@ -136,9 +137,9 @@ class UserMethods
      * query to update the user information in the database is successful, and `false` if there is an
      * error or the query fails.
      */
-    public function updateUser(User $user): bool
+    public function update_user(User $user): bool
     {
-        require 'db.php';
+        include 'connection.php';
         $sql = "UPDATE usuario SET nome_usuario = '$user->name', email_usuario = '$user->email', telefone_usuario = '$user->telephone' WHERE id_usuario = '$user->id'";
         if ($db->query($sql) === TRUE) {
             return true;
