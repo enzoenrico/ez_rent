@@ -1,6 +1,10 @@
-body
+body {
+    background-color: #846FB0 !important;
+}
+
 #sing-in-body {
     margin-top: 100px;
+    height: fit-content;
 
     h1 {
         text-align: center;
@@ -10,7 +14,24 @@ body
         background-color: #212529;
         margin: auto;
         max-width: 500px;
+        height: fit-content;
         border-radius: 15px;
         height: 50%;
+    }
+
+    .espaco {
+        padding: 10px;
+    }
+
+    .roll-back {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        a{
+            text-decoration: none;
+            padding-top: 15px;
+            padding-right: 15px;
+        }
     }
 }
