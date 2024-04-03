@@ -38,7 +38,7 @@
 
         <button class="btn-explore" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><span class="navbar-toggler-icon"></span></button>
         <h1 style="color: white; padding-left: 10px;">EzRent</h1>
-
+        <!-- SIDEBAR -->
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
           <div class="offcanvas-header">
             <h3 class="offcanvas-title side-navbar-header" id="offcanvasWithBothOptionsLabel">Explore</h3>
@@ -88,6 +88,7 @@
             </div>
           </div>
         </div>
+        <!-- FIM SIDEBAR -->
 
         <form style="padding-top: 13.5px; padding-right: 10px;" class="d-flex" role="search">
           <input class="form-control button-size me-2" style="min-width: 150px;" type="search" placeholder="Search" aria-label="Search">

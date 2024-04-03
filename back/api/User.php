@@ -49,7 +49,7 @@ class UserMethods
     public function get_user(int $id): User| Error
     {
         include 'connection.php';
-        $result = $db->query("SELECT * FROM usuario WHERE id_usuario = '$id'");
+        $result = $conn->query("SELECT * FROM usuario WHERE id_usuario = '$id'");
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -73,13 +73,14 @@ class UserMethods
      * @return bool The `setUser` function is returning a boolean value. If the SQL query to insert a
      * new user into the database is successful, it returns `true`. Otherwise, it returns `false`.
      */
-    public static function set_user(User $user): bool
+    public static function set_user(User $user01): bool
     {
-        include 'connection.php';
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
         // echo $user->id;
-        $passwd = $user->get_pass();
+        $passwd = $user01->get_pass();
         try {
-            $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user->telephone', '$user->name', '$user->email', '$user->telephone', '$passwd')";
+            $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user01->telephone', '$user01->name', '$user01->email', '$user01->telephone', '$passwd')";
+            $conn->query($sql);
             return true;
         } catch (\Throwable $th) {
             return false;
