@@ -51,3 +51,7 @@ ALTER TABLE Item
     ADD COLUMN descricao varchar(200),
     ADD COLUMN imagem varchar(100),
     ADD COLUN imagemExtensao varchar(10);
+
+ALTER TABLE Aluguel
+    ADD COLUMN fk_Locador_id_usuario int;
+    ADD CONSTRAINT FK_Aluguel_3 FOREIGN KEY (fk_Locador_id_usuario) REFERENCES Usuario (id_usuario) ON DELETE CASCADE;

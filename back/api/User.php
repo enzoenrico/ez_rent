@@ -80,6 +80,7 @@ class UserMethods
         $passwd = $user->get_pass();
         try {
             $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user->telephone', '$user->name', '$user->email', '$user->telephone', '$passwd')";
+            $db->query($sql);
             return true;
         } catch (\Throwable $th) {
             return false;
