@@ -76,11 +76,12 @@ class UserMethods
     public static function set_user(User $user01): bool
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-        // echo $user->id;
+
         $passwd = $user01->get_pass();
         try {
             $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user01->telephone', '$user01->name', '$user01->email', '$user01->telephone', '$passwd')";
             $conn->query($sql);
+            echo "DEUUU POHA";
             return true;
         } catch (\Throwable $th) {
             return false;
