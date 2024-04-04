@@ -21,6 +21,13 @@
   #left-nav-bar {
     position: fixed;
   }
+  .add-items{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+}
 </style>
 
 
@@ -38,7 +45,7 @@
 
         <button class="btn-explore" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><span class="navbar-toggler-icon"></span></button>
         <h1 style="color: white; padding-left: 10px;">EzRent</h1>
-        <!-- SIDEBAR -->
+
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
           <div class="offcanvas-header">
             <h3 class="offcanvas-title side-navbar-header" id="offcanvasWithBothOptionsLabel">Explore</h3>
@@ -77,18 +84,19 @@
                   </svg>
                   <a href="">Perfil</a>
                 </li>
-                <li>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-plus" viewBox="0 0 16 16">
-                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                  </svg>
-                  <a href="" style="display: flex; flex-wrap: nowrap;">Add itens</a>
-                </li>
-
+                
               </ul>
             </div>
           </div>
         </div>
-        <!-- FIM SIDEBAR -->
+        
+        <div class="add-items">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16" >
+            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>
+          <a href="/ez_rent/front/item/cadastro_item.php" style="display: flex; flex-wrap: nowrap; padding-left: 5px;">Add itens</a>
+        </div>
 
         <form style="padding-top: 13.5px; padding-right: 10px;" class="d-flex" role="search">
           <input class="form-control button-size me-2" style="min-width: 150px;" type="search" placeholder="Search" aria-label="Search">

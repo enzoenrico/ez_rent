@@ -1,0 +1,46 @@
+body {
+    /* background-color: #846FB0 !important; */
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 5%, rgba(116, 9, 121, 1) 100%, rgba(0, 212, 255, 1) 100%);
+}
+
+#sing-in-body {
+    margin-top: 100px;
+    height: fit-content;
+
+    h1 {
+        text-align: center;
+        color: white;
+    }
+
+    .sign-in-box {
+        background-color: #212529;
+        margin: auto;
+        max-width: 500px;
+        height: fit-content;
+        border-radius: 15px;
+        height: 50%;
+    }
+
+    .espaco {
+        padding: 10px;
+    }
+
+    .roll-back {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        a {
+            text-decoration: none;
+            padding-top: 15px;
+            padding-right: 15px;
+        }
+    }
+    .item-box{
+        top: 50;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
