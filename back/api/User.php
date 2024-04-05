@@ -103,9 +103,9 @@ class UserMethods
      */
     public function delete_user($id): bool
     {
-        include 'connection.php';
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
         $sql = "DELETE FROM usuario WHERE id_usuario = '$id'";
-        if ($db->query($sql) === TRUE) {
+        if ($conn->query($sql) === TRUE) {
             return true;
         } else {
             return false;
