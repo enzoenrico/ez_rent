@@ -46,21 +46,23 @@ class UserMethods
      * @param int $id The ID of the user to retrieve.
      * @return User|Error The user object if found, or an error object if not found.
      */
-    public function get_user(int $id): User| Error
-    {
-        include 'connection.php';
-        $result = $conn->query("SELECT * FROM usuario WHERE id_usuario = '$id'");
-        $data = array();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
+    public function get_user($pass, $userEmail): User|Error {
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
+        
+        $result = $conn->query("SELECT * FROM usuario WHERE email_usuario = '$userEmail' AND senha_usuario = '$pass'");
+        
+        if ($result) {
+            if ($result->num_rows > 0) {
+                $data = $result->fetch_assoc();
+                $user = new User($data['id_usuario'], $data['nome_usuario'], $data['email_usuario'], $data['telefone_usuario']);
+                $user->set_pass($data['senha_usuario']);
+                return $user;
+            } else {
+                return new Error('No results found.');
             }
-            $res = new User($data['id_usuario'], $data['nome_usuario'], $data['email_usuario'], $data['telefone_usuario']);
-            $res->set_pass($data['senha_usuario']);
         } else {
-            $res = new Error('No results found.');
+            return new Error('Query failed: ' . $conn->error);
         }
-        return $res;
     }
     /**
      * The function setUser takes a User object, extracts its information, and inserts it into a

@@ -82,3 +82,28 @@
 #btn-search {
     background-color: #846FB0;
 }
+
+.logged-actions {
+    padding-right: 30px;
+    a {
+        text-decoration: none;
+        color: white;
+        font-family: roboto;
+        font-weight: 300;
+        padding-top: 10px;
+    }
+
+
+}
+
+.logged-actions:hover {
+    gap: 20px;
+    a {
+        color: #846FB0;
+        border-bottom: solid 2px #846FB0;
+    }
+
+    svg {
+        fill: #846FB0;
+    }
+}

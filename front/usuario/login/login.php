@@ -2,36 +2,41 @@
 require('C:\xampp\htdocs\ez_rent\back\api\User.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if ($_POST['inputName'] != null && $_POST['inputEmail'] != null && $_POST['inputTelefone'] != null && $_POST['inputPassword'] != null) {
-        $name = $_POST['inputName'];
-        $email = $_POST['inputEmail'];
-        $telefone = $_POST['inputTelefone'];
-        $passwrd = md5($_POST['inputPassword']);
+    if ($_POST['inputEmail'] != null && $_POST['inputPassword'] != null) {
+        $userEmail = $_POST['inputEmail'];
+        $pass = md5($_POST['inputPassword']);
         $id = 11;
 
-        $newUser = new User($id, $name, $email, $telefone);
-        $newUser->set_pass($passwrd);
-        UserMethods::set_user($newUser);
+        $action = new UserMethods();
+        $user = $action->get_user($pass, $userEmail);
+
+        if ($user instanceof User) {
+            session_start();
+            $_SESSION['user'] = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'telephone' => $user->telephone
+            ];
+            $_SESSION['logado'] = true;
+            header("Location: /ez_rent/index.php");
+        }else{
+            echo "adadadadadad";
+        }
     } else {
         echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">
     Campos inválidos! Revise seus dados!
   </div>';
     }
 }
-
-
-// function newUser($id, $name, $email, $telefone, $passwrd)
-// {
-// }
-
 ?>
 
 <html>
 
 <head>
-    <link rel="stylesheet" href="./cadastro-style.css">
+    <link rel="stylesheet" href="../cadastro/cadastro-style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Cadastro</title>
+    <title>Login</title>
 </head>
 
 <body>
@@ -44,25 +49,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="post" style="padding: 20px;">
                 <div class="row">
                     <div class="form-group espaco">
-                        <label for="inputName" style="color: white;">Nome</label>
-                        <input type="text" class="form-control" id="inputName" name="inputName" placeholder="Digite seu nome">
+                        <label for="inputName" style="color: white;">Email</label>
+                        <input type="text" class="form-control" id="inputEmail" name="inputEmail" placeholder="Digite seu email">
                     </div>
-                    <div class="form-group espaco ">
-                        <label for="inputEmail4" style="color: white;">Email</label>
-                        <input type="email" class="form-control" id="inputEmail" name="inputEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Digite seu email">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group espaco">
-                        <label for="inputName" style="color: white;" mask="">Telefone</label>
-                        <input type="text" class="form-control" id="inputTelefone" name="inputTelefone" placeholder="Digite seu telefone">
-                    </div>
-                </div>
-                <div class="row">
                     <div class="form-group espaco ">
                         <label for="inputPassword4" style="color: white;">Senha</label>
                         <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Digite sua senha">
                     </div>
+                </div>
+                <div class="row">
                 </div><br>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
