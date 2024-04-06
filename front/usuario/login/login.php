@@ -20,8 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ];
             $_SESSION['logado'] = true;
             header("Location: /ez_rent/index.php");
-        }else{
-            echo "adadadadadad";
+        } else {
+            echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">
+        Campos inválidos! Revise seus dados!
+      </div>';
         }
     } else {
         echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">

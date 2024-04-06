@@ -3,9 +3,9 @@ session_start();
 include(__DIR__ . '/front/navbar.php');
 require_once('autoload.php');
 
-$_SESSION['logado'] = null;
+$_SESSION['logado'] = $_SESSION['logado'] ?? null;
 
-if ($_SESSION['logado']){
+if (isset($_SESSION['logado']) && $_SESSION['logado']){
     echo '<div class="alert alert-warning alert-dismissible fade show" style="background-color: lightgreen; color: black;" role="alert">';
   echo '<strong> Bem-vindo ao EzRent ' . $_SESSION['user']['name'] . '!</strong>';
   echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
