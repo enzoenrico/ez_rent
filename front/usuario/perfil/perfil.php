@@ -5,6 +5,8 @@ require_once($_SESSION['url'] . '\autoload.php');
 
 $userInfo = $_SESSION['user'];
 $actions = new UserMethods();
+$itemActions = new ItemMethods();
+$items = $itemActions->get_user_item($_SESSION['user']['id']);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['logout'])) {
@@ -24,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user']['name'] = $name;
                 $_SESSION['user']['email'] = $email;
                 $_SESSION['user']['telephone'] = $telefone;
+
                 header("Location: /ez_rent/front/usuario/perfil/perfil.php");
             }
         } else {
@@ -57,7 +60,15 @@ function logout()
 
             <!-- CARD DE INFORMAÇÕES DO PERFIL - INÍCIO -->
 
-            <div class="col-3 teste perfil-box" style="text-align: center;">
+            <div class="col-3 teste perfil-box">
+                <div class="roll-back">
+                    <div class="roll-back-btn btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                        </svg>
+                        <a href="/ez_rent/index.php">Voltar</a>
+                    </div>
+                </div>
                 <div class="perfil-box">
                     <h2 style="color: white;">Suas Informações:</h2>
                     <div class="col infos">
@@ -202,7 +213,11 @@ function logout()
         <!-- INICIO MOSTRAR ITENS -->
 
         <div class="row col teste collapse collapse-vertical" style="max-height: fit-content; margin-top: 30px;" id="itens">
-
+            <?php 
+                 foreach ($items as $item) {
+                    echo $item->name;
+                }
+            ?>
         </div>
 
         <!-- FIM MOSTRAR ITENS -->
