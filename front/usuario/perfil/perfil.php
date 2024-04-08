@@ -153,7 +153,7 @@ function logout()
 
             <div class="col teste collapse collapse-horizontal" id="editar">
                 <form method="post" style="padding: 20px;">
-                    <div class="row">
+                    <div class="row" style="height: auto;">
                         <div style="text-align: start;" class="form-group col-md-6 espaco">
                             <label for="inputName" style="color: white;">Nome</label>
                             <?php
@@ -212,11 +212,33 @@ function logout()
 
         <!-- INICIO MOSTRAR ITENS -->
 
-        <div class="row col teste collapse collapse-vertical" style="max-height: fit-content; margin-top: 30px;" id="itens">
-            <?php 
-                 foreach ($items as $item) {
-                    echo $item->name;
+        <div class="row col teste collapse collapse-vertical items" style="margin-top: 30px; height: auto; text-align: start;" id="itens">
+            <?php
+            foreach ($items as $item) {
+                if($item->available == 1){
+                    $ava = "Disponível";
+                }else{
+                    $ava = "Indisponível";
                 }
+                echo '" <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
+                        <div  style="margin-bottom: 20px;">
+                        <p style="margin: 0;"">Valor do aluguel: </p>
+                        <strong class="card-text">R$' . $item->value . '</strong>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                        <p style="margin: 0;"">Disponibilidade: </p>
+                        <strong class="card-text">' . $ava . '</strong>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                        <p style="margin: 0;"">Descrição: </p>
+                        <strong class="card-text">' . $item->description . '</strong>
+                        </div>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>"';
+            }
             ?>
         </div>
 

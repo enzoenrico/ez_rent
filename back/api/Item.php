@@ -6,7 +6,7 @@ class Item
     public string $name;
     public float $value;
     public bool $available;
-    public string $group;
+    public string|null $group;
     public string $description;
 
     public function __construct($id, $name, $value, $available, $group, $description, $id_user)
@@ -83,7 +83,7 @@ class ItemMethods
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $item = new Item($row['id_item'], $row['nome_item'], $row['valor_item'], $row['disponivel'], $row['categoria'], $row['descricao'], $row['fk_Usuario_id_usuario']);
+                $item = new Item($row['id_item'], $row['nome_item'], $row['valor_item'], $row['disponivel'], $row['categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
                 $data[] = $item;
             }
             return $data;

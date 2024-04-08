@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = $_POST['inputName'];
             $group = $_POST['inputGroup'];
             $description = $_POST['inputDesc'];
-            $id = 1;
+            $id = 2;
 
             $newItem = new Item($id, $name, $value, 1, $group, $description, $_SESSION['user']['id']);
             if ($actions->add_item($newItem)) {

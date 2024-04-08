@@ -67,4 +67,10 @@ body {
     .roll-back-btn {
         background-color: #846FB0;
     }
+
+    .items {
+        p{
+            margin: 0;
+        }
+    }
 }
