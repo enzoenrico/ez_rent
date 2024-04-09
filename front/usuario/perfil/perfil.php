@@ -6,38 +6,26 @@ require_once($_SESSION['url'] . '\autoload.php');
 $userInfo = $_SESSION['user'];
 $actions = new UserMethods();
 $itemActions = new ItemMethods();
-$items = $itemActions->get_user_item($_SESSION['user']['id']);
+
+if ($itemActions->get_user_item($_SESSION['user']['id']) !== null) {
+    $items = $itemActions->get_user_item($_SESSION['user']['id']);
+} else {
+    $items = null;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['logout'])) {
         logout();
     } else if (isset($_POST['update'])) {
-        if ($_POST['inputName'] != null && $_POST['inputEmail'] != null && $_POST['inputTelefone'] != null && $_POST['inputPassword'] != null) {
-            $name = $_POST['inputName'];
-            $email = $_POST['inputEmail'];
-            $telefone = $_POST['inputTelefone'];
-            $passwrd = md5($_POST['inputPassword']);
-            $id = 11;
-
-            $editUser = new User($id, $name, $email, $telefone);
-            $editUser->set_pass($passwrd);
-
-            if ($actions->update_user($editUser, $userInfo['id'])) {
-                $_SESSION['user']['name'] = $name;
-                $_SESSION['user']['email'] = $email;
-                $_SESSION['user']['telephone'] = $telefone;
-
-                header("Location: /ez_rent/front/usuario/perfil/perfil.php");
-            }
-        } else {
-            echo '<div class="alert alert-warning alert-dismissible fade show" style="background-color: red; color: black;" role="alert">
-    Campos inválidos! Revise seus dados!
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-        }
-    } else {
+        update_user($actions, $userInfo);
+    } else if (isset($_POST['delete_user'])) {
         $actions->delete_user($userInfo['id']);
         session_destroy();
         header("Location: /ez_rent/index.php");
+    } else if (isset($_POST['delete_item'])) {
+        delete_item($_POST['delete_item']);
+    } else if (isset($_POST['update_item'])) {
+        update_item($_POST['update_item']);
     }
 }
 
@@ -46,6 +34,44 @@ function logout()
     session_destroy();
     header("Location: /ez_rent/index.php");
     exit();
+}
+
+function delete_item($id)
+{
+    $delete = new ItemMethods();
+    $delete->delete_item($id);
+}
+
+function update_user($actions, $userInfo)
+{
+    if ($_POST['inputName'] != null && $_POST['inputEmail'] != null && $_POST['inputTelefone'] != null && $_POST['inputPassword'] != null) {
+        $name = $_POST['inputName'];
+        $email = $_POST['inputEmail'];
+        $telefone = $_POST['inputTelefone'];
+        $passwrd = md5($_POST['inputPassword']);
+        $id = 11;
+
+        $editUser = new User($id, $name, $email, $telefone);
+        $editUser->set_pass($passwrd);
+
+        if ($actions->update_user($editUser, $userInfo['id'])) {
+            $_SESSION['user']['name'] = $name;
+            $_SESSION['user']['email'] = $email;
+            $_SESSION['user']['telephone'] = $telefone;
+
+            header("Location: /ez_rent/front/usuario/perfil/perfil.php");
+        }
+    } else {
+        echo '<div class="alert alert-warning alert-dismissible fade show" style="background-color: red; color: black;" role="alert">
+    Campos inválidos! Revise seus dados!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+    }
+}
+
+function update_item(Item $item)
+{
+    $update = new ItemMethods();
+    $update->update_item($item, $item->get_id());
 }
 ?>
 
@@ -106,7 +132,7 @@ function logout()
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                                            <button type="submit" class="btn btn-primary">Deletar</button>
+                                            <button type="submit" name="delete_user" class="btn btn-primary">Deletar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -214,30 +240,77 @@ function logout()
 
         <div class="row col teste collapse collapse-vertical items" style="margin-top: 30px; height: auto; text-align: start;" id="itens">
             <?php
-            foreach ($items as $item) {
-                if($item->available == 1){
-                    $ava = "Disponível";
-                }else{
-                    $ava = "Indisponível";
-                }
-                echo '" <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content;">
-                    <div class="card-body">
-                        <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
-                        <div  style="margin-bottom: 20px;">
-                        <p style="margin: 0;"">Valor do aluguel: </p>
-                        <strong class="card-text">R$' . $item->value . '</strong>
+            if ($items !== null) {
+                foreach ($items as $item) {
+                    if ($item->available == 1) {
+                        $ava = "Disponível";
+                    } else {
+                        $ava = "Indisponível";
+                    }
+                    echo '" <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content;">
+                        <div class="card-body">
+                            <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
+                            <div  style="margin-bottom: 20px;">
+                            <p style="margin: 0;"">Valor do aluguel: </p>
+                            <strong class="card-text">R$' . $item->value . '</strong>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                            <p style="margin: 0;"">Disponibilidade: </p>
+                            <strong class="card-text">' . $ava . '</strong>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                            <p style="margin: 0;"">Descrição: </p>
+                            <strong class="card-text">' . $item->description . '</strong>
+                            </div>
+                            <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete_item_' . $item->get_id() . '">
+                            Deletar item
+                        </button>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#update_item_' . $item->get_id() . '" aria-expanded="false" aria-controls="collapseWidthExample">
+                            Editar item
+                        </button>
                         </div>
-                        <div style="margin-bottom: 20px;">
-                        <p style="margin: 0;"">Disponibilidade: </p>
-                        <strong class="card-text">' . $ava . '</strong>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                        <p style="margin: 0;"">Descrição: </p>
-                        <strong class="card-text">' . $item->description . '</strong>
-                        </div>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
-                </div>"';
+                    <form method="post">
+                <div class="modal fade" id="delete_item_' . $item->get_id() . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Deletar item</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Você deseja deletar o item' . $item->name . '?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                                <button type="submit" name="delete_item" value="' . $item->get_id() . '" class="btn btn-primary">Deletar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>"
+            <form method="post">
+                <div class="modal fade" id="update_item_' . $item->get_id() . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Editar item</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Você deseja salvar as alterações do item ' . $item->name . '?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                                <button type="submit" name="update_item" value="' . $item . '" class="btn btn-primary">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>"';
+                }
+            } else {
+                echo '<h1 style="text-align: center; color: white;">Nenhum item disponível!</h1>';
             }
             ?>
         </div>

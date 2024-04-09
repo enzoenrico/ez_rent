@@ -25,9 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = $_POST['inputName'];
             $group = $_POST['inputGroup'];
             $description = $_POST['inputDesc'];
-            $id = 2;
 
-            $newItem = new Item($id, $name, $value, 1, $group, $description, $_SESSION['user']['id']);
+            $newItem = new Item($name, $value, 1, $group, $description, $_SESSION['user']['id']);
             if ($actions->add_item($newItem)) {
                 echo '<div class="alert alert-sucess alert-dismissible fade show" color: black;" role="alert">
                     Item adicionado com sucesso! Clique em itens cadastrados para ver.

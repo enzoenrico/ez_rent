@@ -9,15 +9,22 @@ class Item
     public string|null $group;
     public string $description;
 
-    public function __construct($id, $name, $value, $available, $group, $description, $id_user)
+    public function __construct( $name, $value, $available, $group, $description, $id_user)
     {
-        $this->id = $id;
         $this->name = $name;
         $this->value = $value;
         $this->available = $available;
         $this->group = $group;
         $this->description = $description;
         $this->id_user = $id_user;
+    }
+    public function set_id($id)
+    {
+        $this->id = $id;
+    }
+    public function get_id(): int
+    {
+        return $this->id;
     }
 }
 
@@ -30,11 +37,21 @@ class ItemMethods
      * executed on the database. This result typically contains all the items retrieved from the "item"
      * table in the database.
      */
-    public function get_all_items(): array
+    public function get_all_items()
     {
-        include 'connection.php';
-        $result = $db->query("SELECT * FROM item");
-        return $result;
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
+        $result = $conn->query("SELECT * FROM item");
+        $data = array();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
+                $item->set_id($row['id_item']);
+                $data[] = $item;
+            }
+            return $data;
+        }else {
+            return null;
+        }
     }
     /**
      * Adds an item to the system.
@@ -47,7 +64,7 @@ class ItemMethods
         // Add item to database
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
         try {
-            $sql = "INSERT INTO item (id_item, nome_item, valor_item, disponivel, descricao, fk_Usuario_id_usuario) VALUES ('$i->id', '$i->name', '$i->value', '$i->available', '$i->description', '$i->id_user')";
+            $sql = "INSERT INTO item (nome_item, valor_item, disponivel, descricao, fk_Usuario_id_usuario) VALUES ('$i->name', '$i->value', '$i->available', '$i->description', '$i->id_user')";
             $conn->query($sql);
         } catch (\Throwable $th) {
             echo $th;
@@ -83,7 +100,8 @@ class ItemMethods
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $item = new Item($row['id_item'], $row['nome_item'], $row['valor_item'], $row['disponivel'], $row['categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
+                $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
+                $item->set_id($row['id_item']);
                 $data[] = $item;
             }
             return $data;
@@ -98,11 +116,12 @@ class ItemMethods
      * @param Item $i The item to be updated.
      * @return bool Returns true if the item was successfully updated, false otherwise.
      */
-    public function update_item(Item $i): bool
+    public function update_item(Item $i, $id): bool
     {
-        include 'connection.php';
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
         try {
-            $sql = "UPDATE item SET nome_item = $i->name, valor_item = $i->value, disponivel = $i->available, categoria = $i->group, descricao = $i->description WHERE id_item = $i->id";
+            $sql = "UPDATE item SET nome_item = $i->name, valor_item = $i->value, disponivel = $i->available, categoria_item = $i->group, descricao = $i->description WHERE id_item = '$id'";
+            $conn->query($sql);
         } catch (\Throwable $th) {
             echo $th;
             return false;
@@ -117,9 +136,9 @@ class ItemMethods
      */
     public function delete_item(int $id): bool
     {
-        include 'connection.php';
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
         $sql = "DELETE FROM item WHERE id_item = $id";
-        if ($db->query($sql) === TRUE) {
+        if ($conn->query($sql) === TRUE) {
             return true;
         } else {
             return false;

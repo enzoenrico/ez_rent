@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST['inputEmail'];
         $telefone = $_POST['inputTelefone'];
         $passwrd = md5($_POST['inputPassword']);
-        $id = 11;
+        $id = 20;
 
         $newUser = new User($id, $name, $email, $telefone);
         $newUser->set_pass($passwrd);
