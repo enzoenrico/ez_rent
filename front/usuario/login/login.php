@@ -20,8 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ];
             $_SESSION['logado'] = true;
             header("Location: /ez_rent/index.php");
-        }else{
-            echo "adadadadadad";
+        } else {
+            echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">
+        Campos inválidos! Revise seus dados!
+      </div>';
         }
     } else {
         echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">
@@ -61,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div><br>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Salvar
+                    Entrar
                 </button>
 
                 <!-- Modal -->
@@ -69,15 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Salvar cadastro</h1>
+                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Entrar</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Você deseja salvar seu cadastro?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                <button type="submit" class="btn btn-primary">Salvar</button>
+                                <button type="submit" class="btn btn-primary">Entrar</button>
                             </div>
                         </div>
                     </div>

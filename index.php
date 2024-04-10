@@ -3,13 +3,21 @@ session_start();
 include(__DIR__ . '/front/navbar.php');
 require_once('autoload.php');
 
-$_SESSION['logado'] = null;
+$_SESSION['logado'] = $_SESSION['logado'] ?? null;
 
-if ($_SESSION['logado']){
+if (isset($_SESSION['logado']) && $_SESSION['logado']) {
     echo '<div class="alert alert-warning alert-dismissible fade show" style="background-color: lightgreen; color: black;" role="alert">';
-  echo '<strong> Bem-vindo ao EzRent ' . $_SESSION['user']['name'] . '!</strong>';
-  echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+    echo '<strong> Bem-vindo ao EzRent ' . $_SESSION['user']['name'] . '!</strong>';
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 }
+
+$itemActions = new ItemMethods();
+if ($itemActions->get_all_items() !== null) {
+    $items = $itemActions->get_all_items();
+}else {
+    $items = null;
+}
+
 ?>
 <html>
 <link rel="stylesheet" href="./style.css">
@@ -35,18 +43,34 @@ if ($_SESSION['logado']){
     </style>
     <div id="content" class="row">
         <?php
-        for ($i = 0; $i < 20; $i++) {
-        ?>
-            <div class="card" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-
-        <?php
+        if ($items !== null) {
+            foreach ($items as $item) {
+                if ($item->available == 1) {
+                    $ava = "Disponível";
+                } else {
+                    $ava = "Indisponível";
+                }
+                echo ' <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
+                        <div  style="margin-bottom: 20px;">
+                        <p style="margin: 0;"">Valor do aluguel: </p>
+                        <strong class="card-text">R$' . $item->value . '</strong>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                        <p style="margin: 0;"">Disponibilidade: </p>
+                        <strong class="card-text">' . $ava . '</strong>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                        <p style="margin: 0;"">Descrição: </p>
+                        <strong class="card-text">' . $item->description . '</strong>
+                        </div>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>';
+            }
+        }else {
+            echo '<h1 style="text-align: center;">Nenhum item disponível!</h1>';
         }
         ?>
     </div>

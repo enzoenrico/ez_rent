@@ -36,7 +36,7 @@ class UserMethods
     public static function get_all()
     {
         include 'connection.php';
-        $result = $db->query("SELECT * FROM usuario");
+        $result = $conn->query("SELECT * FROM usuario");
         return $result;
     }
 
@@ -83,7 +83,6 @@ class UserMethods
         try {
             $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user01->telephone', '$user01->name', '$user01->email', '$user01->telephone', '$passwd')";
             $conn->query($sql);
-            echo "DEUUU POHA";
             return true;
         } catch (\Throwable $th) {
             return false;
@@ -103,9 +102,9 @@ class UserMethods
      */
     public function delete_user($id): bool
     {
-        include 'connection.php';
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
         $sql = "DELETE FROM usuario WHERE id_usuario = '$id'";
-        if ($db->query($sql) === TRUE) {
+        if ($conn->query($sql) === TRUE) {
             return true;
         } else {
             return false;
@@ -126,11 +125,11 @@ class UserMethods
      * SQL query to update the user information in the database is successful, and `false` if there is
      * an error during the update process.
      */
-    public function update_user(User $user, int $search_id): bool
+    public function update_user(User $user02, int $search_id): bool
     {
-        include 'connection.php';
-        $sql = "UPDATE usuario SET nome_usuario = '$user->name', email_usuario = '$user->email', telefone_usuario = '$user->telephone' WHERE id_usuario = '$search_id'";
-        if ($db->query($sql) === TRUE) {
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
+        $sql = "UPDATE usuario SET nome_usuario = '$user02->name', email_usuario = '$user02->email', telefone_usuario = '$user02->telephone' WHERE id_usuario = '$search_id'";
+        if ($conn->query($sql) === TRUE) {
             return true;
         } else {
             return false;

@@ -10,10 +10,9 @@ body {
 .teste {
     padding: 30px;
     border-radius: 15px;
-    background-color: rgb(33, 37, 41, 0.8);
-    opacity: 50%;
+    background-color: rgb(33, 37, 41, 0.6);
     height: 100%;
-    
+
 }
 
 .content {
@@ -25,4 +24,53 @@ body {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+}
+
+::-webkit-scrollbar {
+    visibility: hidden;
+    width: 0;
+}
+
+.infos {
+    color: white;
+    min-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+.teste2 {
+    h5 {
+        margin: 0;
+        text-align: start;
+    }
+
+    display: flex !important;
+    padding: 10px;
+    text-align: start;
+    gap: 20px;
+}
+
+.roll-back {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 35px;
+    width: 100%;
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .roll-back-btn {
+        background-color: #846FB0;
+    }
+
+    .items {
+        p{
+            margin: 0;
+        }
+    }
 }

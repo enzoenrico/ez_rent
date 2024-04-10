@@ -1,4 +1,5 @@
 <?php
+session_start();
 require('C:\xampp\htdocs\ez_rent\back\api\User.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,24 +8,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST['inputEmail'];
         $telefone = $_POST['inputTelefone'];
         $passwrd = md5($_POST['inputPassword']);
-        $id = 11;
+        $id = 20;
 
         $newUser = new User($id, $name, $email, $telefone);
         $newUser->set_pass($passwrd);
-        UserMethods::set_user($newUser);
-        header("Location: /ez_rent/index.php");
+        if (UserMethods::set_user($newUser)) {
+            $action = new UserMethods();
+            $user = $action->get_user($passwrd, $email);
+
+            if ($user instanceof User) {
+                session_start();
+                $_SESSION['user'] = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'telephone' => $user->telephone
+                ];
+                $_SESSION['logado'] = true;
+                header("Location: /ez_rent/index.php");
+            }
+        }
     } else {
         echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">
     Campos inválidos! Revise seus dados!
   </div>';
     }
 }
-
-
-// function newUser($id, $name, $email, $telefone, $passwrd)
-// {
-// }
-
 ?>
 
 <html>
