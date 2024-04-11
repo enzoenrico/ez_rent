@@ -40,6 +40,7 @@ function delete_item($id)
 {
     $delete = new ItemMethods();
     $delete->delete_item($id);
+    header("Location: /ez_rent/front/usuario/perfil/perfil.php");
 }
 
 function update_user($actions, $userInfo)
@@ -238,16 +239,18 @@ function update_item(Item $item)
 
         <!-- INICIO MOSTRAR ITENS -->
 
-        <div class="row col teste collapse collapse-vertical items" style="margin-top: 30px; height: auto; text-align: start;" id="itens">
-            <?php
-            if ($items !== null) {
-                foreach ($items as $item) {
-                    if ($item->available == 1) {
-                        $ava = "Disponível";
-                    } else {
-                        $ava = "Indisponível";
-                    }
-                    echo '" <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content;">
+        <form method="post">
+            <div class="row col teste collapse collapse-vertical items" style="margin-top: 30px; height: auto; text-align: start;" id="itens">
+                <?php
+                if ($items !== null) {
+                    foreach ($items as $item) {
+                        if ($item->available == 1) {
+                            $ava = "Disponível";
+                        } else {
+                            $ava = "Indisponível";
+                        }
+                        $selectedItem = $item;
+                        echo '<div class="card" style="width: 18rem; height: fit-content; max-height: fit-content;">
                         <div class="card-body">
                             <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
                             <div  style="margin-bottom: 20px;">
@@ -265,12 +268,10 @@ function update_item(Item $item)
                             <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete_item_' . $item->get_id() . '">
                             Deletar item
                         </button>
-                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#update_item_' . $item->get_id() . '" aria-expanded="false" aria-controls="collapseWidthExample">
+                        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#update_item_' . $item->get_id() . '" aria-expanded="false" aria-controls="collapseWidthExample">
                             Editar item
                         </button>
                         </div>
-                    </div>
-                    <form method="post">
                 <div class="modal fade" id="delete_item_' . $item->get_id() . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -288,13 +289,71 @@ function update_item(Item $item)
                         </div>
                     </div>
                 </div>
-            </form>"';
+                <div class="modal fade" id="update_item_' . $item->get_id() . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <form method="post" style="padding: 20px;">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Editar item</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <div class="row" style="height: auto;">
+                            <div style="text-align: start;" class="form-group col-md-6 espaco">
+                                <label>Nome</label>
+                                <input type="text" value="' . $item->name . '" class="form-control" id="inputName" name="nameItem">
+                            </div>
+                            <div style="text-align: start;" class="form-group col-md-6 espaco ">
+                                <label>Valor do aluguel</label>
+                                <input type="text" value="' . $item->value . '" class="form-control" id="inputEmail" name="valueItem">
+                            </div>
+                        </div>
+                            <div class="row" style="height: auto;">
+                            <div style="text-align: start;" class="form-group col-md-6 espaco">
+                                <label>Nome</label>
+                                <input type="text" value="' . $item->name . '" class="form-control" id="inputName" name="nameItem">
+                            </div>
+                            <div style="text-align: start;" class="form-group col-md-6 espaco ">
+                                <label>Valor do aluguel</label>
+                                <input type="text" value="' . $item->value . '" class="form-control" id="inputEmail" name="valueItem">
+                            </div>
+                        </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                                <button type="submit" name="update_item" value="' . $item->get_id() . '" class="btn btn-primary">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                <br>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Salvar cadastro</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Você deseja salvar?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                <button type="submit" name="update" class="btn btn-primary">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+                </div>
+                </div>';
+                    }
+                } else {
+                    echo '<h1 style="text-align: center; color: white;">Nenhum item disponível!</h1>';
                 }
-            } else {
-                echo '<h1 style="text-align: center; color: white;">Nenhum item disponível!</h1>';
-            }
-            ?>
-        </div>
+                ?>
+            </div>
+        </form>
 
         <!-- FIM MOSTRAR ITENS -->
     </div>

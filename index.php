@@ -14,7 +14,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado']) {
 $itemActions = new ItemMethods();
 if ($itemActions->get_all_items() !== null) {
     $items = $itemActions->get_all_items();
-}else {
+} else {
     $items = null;
 }
 
@@ -69,7 +69,7 @@ if ($itemActions->get_all_items() !== null) {
                     </div>
                 </div>';
             }
-        }else {
+        } else {
             echo '<h1 style="text-align: center;">Nenhum item disponível!</h1>';
         }
         ?>
