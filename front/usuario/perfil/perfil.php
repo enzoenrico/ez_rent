@@ -238,7 +238,7 @@ function update_item(Item $item)
 
         <!-- INICIO MOSTRAR ITENS -->
 
-        <div class="row col teste collapse collapse-vertical items" style="margin-top: 30px; height: auto; text-align: start;" id="itens">
+        <div class="row teste collapse content-wrap items" style="margin-top: 30px; height: auto; text-align: start;" id="itens">
             <?php
             if ($items !== null) {
                 foreach ($items as $item) {
@@ -269,26 +269,27 @@ function update_item(Item $item)
                             Editar item
                         </button>
                         </div>
-                    </div>
-                    <form method="post">
-                <div class="modal fade" id="delete_item_' . $item->get_id() . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Deletar item</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Você deseja deletar o item' . $item->name . '?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                                <button type="submit" name="delete_item" value="' . $item->get_id() . '" class="btn btn-primary">Deletar</button>
-                            </div>
+                            <form method="post">
+                                <div class="modal fade" id="delete_item_' . $item->get_id() . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Deletar item</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Você deseja deletar o item' . $item->name . '?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                                            <button type="submit" name="delete_item" value="' . $item->get_id() . '" class="btn btn-primary">Deletar</button>
+                                        </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                            </form>
                         </div>
-                    </div>
-                </div>
-            </form>"';
+                            ';
                 }
             } else {
                 echo '<h1 style="text-align: center; color: white;">Nenhum item disponível!</h1>';

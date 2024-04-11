@@ -6,9 +6,26 @@ require_once('autoload.php');
 $_SESSION['logado'] = $_SESSION['logado'] ?? null;
 
 if (isset($_SESSION['logado']) && $_SESSION['logado']) {
-    echo '<div class="alert alert-warning alert-dismissible fade show" style="background-color: lightgreen; color: black;" role="alert">';
+    echo "<div id='toast' class='toast'>";
     echo '<strong> Bem-vindo ao EzRent ' . $_SESSION['user']['name'] . '!</strong>';
-    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+    echo "</div>
+  
+  <script>
+        // Função para mostrar o card toast
+        function showToast() {
+            var toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(function(){ toast.style.display = 'none'; }, 5000); // Tempo em milissegundos (5 segundos)
+        }
+    
+        window.onload = function() {
+            showToast();
+        };
+  </script>";
+    
+    // echo '<div class="alert alert-warning alert-dismissible fade show" style="background-color: lightgreen; color: black;" role="alert">';
+    // echo '<strong> Bem-vindo ao EzRent ' . $_SESSION['user']['name'] . '!</strong>';
+    // echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 }
 
 $itemActions = new ItemMethods();
@@ -22,11 +39,14 @@ if ($itemActions->get_all_items() !== null) {
 <html>
 <link rel="stylesheet" href="./style.css">
 <link rel="stylesheet" href="./front/navbar-style.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <title>Home</title>
 
 <body>
     <style>
+        .card-size{
+            height: 400px;
+            width: 250px;
+        }
         #content {
             gap: 50px;
             display: flex;
@@ -40,6 +60,7 @@ if ($itemActions->get_all_items() !== null) {
             width: 0;
             height: 0;
         }
+
     </style>
     <div id="content" class="row">
         <?php
@@ -50,20 +71,20 @@ if ($itemActions->get_all_items() !== null) {
                 } else {
                     $ava = "Indisponível";
                 }
-                echo ' <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content;">
+                echo ' <div class="card card-size" >
                     <div class="card-body">
                         <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
                         <div  style="margin-bottom: 20px;">
-                        <p style="margin: 0;"">Valor do aluguel: </p>
-                        <strong class="card-text">R$' . $item->value . '</strong>
+                            <p style="margin: 0;"">Valor do aluguel: </p>
+                            <strong class="card-text">R$' . $item->value . '</strong>
                         </div>
                         <div style="margin-bottom: 20px;">
-                        <p style="margin: 0;"">Disponibilidade: </p>
-                        <strong class="card-text">' . $ava . '</strong>
+                            <p style="margin: 0;"">Disponibilidade: </p>
+                            <strong class="card-text">' . $ava . '</strong>
                         </div>
                         <div style="margin-bottom: 20px;">
-                        <p style="margin: 0;"">Descrição: </p>
-                        <strong class="card-text">' . $item->description . '</strong>
+                            <p style="margin: 0;"">Descrição: </p>
+                            <strong class="card-text">' . $item->description . '</strong>
                         </div>
                         <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>

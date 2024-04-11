@@ -29,6 +29,19 @@
     color: white;
     text-decoration: none;
   }
+
+  .toast  {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: green !important; 
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 5px;
+    z-index: 9999;
+    display: none;
+  }
 </style>
 
 <?php
