@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if (isset($_POST['delete_item'])) {
         delete_item($_POST['delete_item']);
     } else if (isset($_POST['update_item'])) {
-        update_item($_POST['update_item']);
+        update_item($userInfo);
     }
 }
 
@@ -68,10 +68,16 @@ function update_user($actions, $userInfo)
     }
 }
 
-function update_item(Item $item)
+function update_item($userInfo)
 {
-    $update = new ItemMethods();
-    $update->update_item($item, $item->get_id());
+    if ($_POST['nameItem'] != null && $_POST['valueItem'] != null && $_POST['desc'] != null) {
+        $name = $_POST['nameItem'];
+        $value = $_POST['valueItem'];
+        $desc = $_POST['desc'];
+        $item = new Item($name, $value,1, null, $desc, $userInfo['id']);
+        $update = new ItemMethods();
+        $update->update_item($item, $_POST['update_item']);
+    }
 }
 ?>
 
@@ -238,7 +244,7 @@ function update_item(Item $item)
 
         <!-- INICIO MOSTRAR ITENS -->
 
-        <div class="row teste collapse content-wrap items" style="margin-top: 30px; height: auto; text-align: start;" id="itens">
+        <div class="row teste collapse content-wrap items" style="margin-top: 30px; height: auto; text-align: start; overflow: auto;" id="itens">
             <?php
             if ($items !== null) {
                 foreach ($items as $item) {
@@ -247,7 +253,7 @@ function update_item(Item $item)
                     } else {
                         $ava = "Indisponível";
                     }
-                    echo '" <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content;">
+                    echo '" <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content; margin: 10px;">
                         <div class="card-body">
                             <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
                             <div  style="margin-bottom: 20px;">
@@ -309,13 +315,9 @@ function update_item(Item $item)
                                         </div>
                                     </div>
                                         <div class="row" style="height: auto;">
-                                        <div style="text-align: start;" class="form-group col-md-6 espaco">
-                                            <label>Nome</label>
-                                            <input type="text" value="' . $item->name . '" class="form-control" id="inputName" name="nameItem">
-                                        </div>
                                         <div style="text-align: start;" class="form-group col-md-6 espaco ">
-                                            <label>Valor do aluguel</label>
-                                            <input type="text" value="' . $item->value . '" class="form-control" id="inputEmail" name="valueItem">
+                                            <label>Descrição</label>
+                                            <input type="text" value="' . $item->description . '" class="form-control" id="inputEmail" name="desc">
                                         </div>
                                     </div>
                                         </div>
@@ -328,23 +330,7 @@ function update_item(Item $item)
                                 <br>
                             
                                 <!-- Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Salvar cadastro</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Você deseja salvar?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                                <button type="submit" name="update" class="btn btn-primary">Salvar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
+                                
                     </form>
                 </div>
                             ';

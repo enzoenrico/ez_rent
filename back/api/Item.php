@@ -119,8 +119,9 @@ class ItemMethods
     public function update_item(Item $i, $id): bool
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
+        
         try {
-            $sql = "UPDATE item SET nome_item = $i->name, valor_item = $i->value, disponivel = $i->available, categoria_item = $i->group, descricao = $i->description WHERE id_item = '$id'";
+            $sql = "UPDATE item SET nome_item = '$i->name', valor_item = '$i->value', descricao = '$i->description' WHERE id_item = '$id'";
             $conn->query($sql);
         } catch (\Throwable $th) {
             echo $th;
