@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="form-group espaco ">
                         <label for="inputEmail4" style="color: white;">Valor para locar</label>
-                        <input type="text" class="form-control" id="inputValue" name="inputValue" placeholder="Digite o valor do aluguel">
+                        <input type="text" class="form-control" id="inputValue" name="inputValue" placeholder="Digite o valor do aluguel" pattern="^[0-9]+(?:\.[0-9]+)?$">
                     </div>
                 </div>
                 <div class="row">

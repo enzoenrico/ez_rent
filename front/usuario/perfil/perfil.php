@@ -257,7 +257,7 @@ function update_item($userInfo)
                         <div class="card-body">
                             <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
                             <div  style="margin-bottom: 20px;">
-                            <p style="margin: 0;"">Valor do aluguel: </p>
+                            <p style="margin: 0;">Valor do aluguel: </p>
                             <strong class="card-text">R$' . $item->value . '</strong>
                             </div>
                             <div style="margin-bottom: 20px;">
@@ -265,7 +265,7 @@ function update_item($userInfo)
                             <strong class="card-text">' . $ava . '</strong>
                             </div>
                             <div style="margin-bottom: 20px;">
-                            <p style="margin: 0;"">Descrição: </p>
+                            <p style="margin: 0;">Descrição: </p>
                             <strong class="card-text">' . $item->description . '</strong>
                             </div>
                             <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete_item_' . $item->get_id() . '">
@@ -311,7 +311,7 @@ function update_item($userInfo)
                                         </div>
                                         <div style="text-align: start;" class="form-group col-md-6 espaco ">
                                             <label>Valor do aluguel</label>
-                                            <input type="text" value="' . $item->value . '" class="form-control" id="inputEmail" name="valueItem">
+                                            <input type="text" value="' . $item->value . '" class="form-control" id="inputEmail" name="valueItem" pattern="^[0-9]+(?:\.[0-9]+)?$">
                                         </div>
                                     </div>
                                         <div class="row" style="height: auto;">
