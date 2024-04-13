@@ -8,8 +8,9 @@ class Item
     public bool $available;
     public string|null $group;
     public string $description;
+    public string $group_description;
 
-    public function __construct( $name, $value, $available, $group, $description, $id_user)
+    public function __construct($name, $value, $available, $group, $description, $id_user)
     {
         $this->name = $name;
         $this->value = $value;
@@ -40,16 +41,17 @@ class ItemMethods
     public function get_all_items()
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-        $result = $conn->query("SELECT * FROM item");
+        $result = $conn->query("SELECT Item.*, Categoria_item.descricao as descricao_cat FROM Item INNER JOIN Categoria_item ON Item.fk_Categoria_item = Categoria_item.id_categoria;");
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
+                $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['fk_Categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
                 $item->set_id($row['id_item']);
+                $item->group_description = $row['descricao_cat'];
                 $data[] = $item;
             }
             return $data;
-        }else {
+        } else {
             return null;
         }
     }
@@ -64,7 +66,7 @@ class ItemMethods
         // Add item to database
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
         try {
-            $sql = "INSERT INTO item (nome_item, valor_item, disponivel, descricao, fk_Usuario_id_usuario) VALUES ('$i->name', '$i->value', '$i->available', '$i->description', '$i->id_user')";
+            $sql = "INSERT INTO item (nome_item, valor_item, disponivel, fk_Categoria_item, descricao, fk_Usuario_id_usuario) VALUES ('$i->name', '$i->value', '$i->available', '$i->group', '$i->description', '$i->id_user')";
             $conn->query($sql);
         } catch (\Throwable $th) {
             echo $th;
@@ -79,20 +81,23 @@ class ItemMethods
      * @param int $id The ID of the item to retrieve.
      * @return Item The retrieved item.
      */
-    // public function get_item(int $id): Item{
-    //     include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-    //     $result = $conn->query("SELECT * FROM item WHERE id_item = $id");
-    //     $data = array();
-    //     if ($result->num_rows > 0) {
-    //         while ($row = $result->fetch_assoc()) {
-    //             $data[] = $row;
-    //         }
-    //         $res = new Item($data['id_item'], $data['nome_item'], $data['valor_item'], $data['disponivel'], $data['categoria'], $data['descricao']);
-    //     } else {
-    //         $res = new Error('No results found.');
-    //     }
-    //     return $res;
-    // }
+    public function search_item(String $itemName)
+    {
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
+        $result = $conn->query("SELECT * FROM item WHERE nome_item LIKE '%$itemName%'");
+        $data = array();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['fk_Categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
+                $item->set_id($row['id_item']);
+                $data[] = $item;
+            }
+            return $data;
+        } else {
+            $res = new Error('No results found.');
+        }
+    }
+
     public function get_user_item(int $id)
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
@@ -100,7 +105,7 @@ class ItemMethods
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
+                $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['fk_Categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
                 $item->set_id($row['id_item']);
                 $data[] = $item;
             }
@@ -119,7 +124,7 @@ class ItemMethods
     public function update_item(Item $i, $id): bool
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-        
+
         try {
             $sql = "UPDATE item SET nome_item = '$i->name', valor_item = '$i->value', descricao = '$i->description' WHERE id_item = '$id'";
             $conn->query($sql);

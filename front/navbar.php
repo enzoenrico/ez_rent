@@ -30,12 +30,12 @@
     text-decoration: none;
   }
 
-  .toast  {
+  .toast {
     position: fixed;
     top: 90px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: green !important; 
+    background-color: green !important;
     color: #fff;
     padding: 15px 20px;
     border-radius: 5px;
@@ -47,9 +47,16 @@
 <?php
 
 session_start();
-
+require_once('autoload.php');
 $logado = $_SESSION['logado'] ?? null;
+$_SESSION['itemSearch'] ?? null;
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (isset($_POST['itemSearch'])) {
+    $itemActions = new ItemMethods();
+    $_SESSION['searchResult'] = $itemActions->search_item($_POST['itemSearch']);
+  }
+}
 ?>
 
 
@@ -125,8 +132,8 @@ $logado = $_SESSION['logado'] ?? null;
           </div>
         <?php } ?>
 
-        <form style="padding-top: 13.5px; padding-right: 10px;" class="d-flex" role="search">
-          <input class="form-control button-size me-2" style="min-width: 150px;" type="search" placeholder="Search" aria-label="Search">
+        <form style="padding-top: 13.5px; padding-right: 10px;" class="d-flex" role="search" method="post">
+          <input class="form-control button-size me-2" style="min-width: 150px;" type="search" placeholder="Search" aria-label="Search" name="itemSearch">
           <button id="btn-search" class="btn btn-success" type="submit">Search</button>
         </form>
       </div>

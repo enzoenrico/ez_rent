@@ -21,10 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
     } else {
         $value = floatval($_POST['inputValue']);
-        if ($_POST['inputName'] != null && $_POST['inputValue'] != null && $_POST['inputGroup'] != null && $_POST['inputDesc'] != null) {
+        if ($_POST['inputName'] != null && $_POST['inputValue'] != null && $_POST['inputDesc'] != null && $_POST['selectGroup'] != null) {
             $name = $_POST['inputName'];
-            $group = $_POST['inputGroup'];
+            $group = $_POST['selectGroup'];
             $description = $_POST['inputDesc'];
+            echo $group;
 
             $newItem = new Item($name, $value, 1, $group, $description, $_SESSION['user']['id']);
             if ($actions->add_item($newItem)) {
@@ -69,8 +70,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="row">
                     <div class="form-group espaco">
-                        <label for="inputName" style="color: white;">Categoria</label>
-                        <input type="text" class="form-control" id="inputGroup" name="inputGroup" placeholder="Digite a categoria do item">
+                        <select name="selectGroup">
+                            <option value="1">Tecnologia</option>
+                            <option value="2">Roupa</option>
+                            <option value="3">Utensílio</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
