@@ -265,6 +265,10 @@ function update_item($userInfo)
                             <strong class="card-text">' . $ava . '</strong>
                             </div>
                             <div style="margin-bottom: 20px;">
+                            <p style="margin: 0;">Categoria: </p>
+                            <strong class="card-text">'. $item->group_description .'</strong>
+                            </div>
+                            <div style="margin-bottom: 20px;">
                             <p style="margin: 0;">Descrição: </p>
                             <strong class="card-text">' . $item->description . '</strong>
                             </div>
@@ -315,6 +319,15 @@ function update_item($userInfo)
                                         </div>
                                     </div>
                                         <div class="row" style="height: auto;">
+                                        <div style="text-align: start;" class="form-group col-md-6 espaco ">
+                                            <label>Categoria</label>
+                                            <select class="form-select" aria-label="Default select example" name="selectGroup" >
+                                            <option selected> '. $item->group_description .' </option>
+                                            <option value="1">Tecnologia</option>
+                                            <option value="2">Roupa</option>
+                                            <option value="3">Utensílio</option>
+                                        </select>
+                                        </div>
                                         <div style="text-align: start;" class="form-group col-md-6 espaco ">
                                             <label>Descrição</label>
                                             <input type="text" value="' . $item->description . '" class="form-control" id="inputEmail" name="desc">

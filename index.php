@@ -25,9 +25,29 @@ if (isset($_SESSION['logado']) && $_SESSION['logado']) {
 }
 
 $itemActions = new ItemMethods();
-if (isset($_SESSION['searchResult'])) {
-  $items = $_SESSION['searchResult'];
-  $_SESSION['searchResult'] = [];
+
+if ($_SESSION['itemSearch']) {
+  if (isset($_SESSION['searchResult'])) {
+    $items = $_SESSION['searchResult'];
+  }else{
+    $items = $itemActions->get_all_items();
+    echo '<div id="toast_search" class="toast" style="text-align: center; background-color: red !important;">';
+  echo '<strong> Nenhum item encontrado!</strong>';
+  echo "</div>
+  
+  <script>
+        // Função para mostrar o card toast
+        function showToast() {
+            var toast = document.getElementById('toast_search');
+            toast.style.display = 'block';
+            setTimeout(function(){ toast.style.display = 'none'; }, 5000); // Tempo em milissegundos (5 segundos)
+        }
+    
+        window.onload = function() {
+            showToast();
+        };
+  </script>";
+  }
 } else {
   $items = $itemActions->get_all_items();
 }
@@ -96,6 +116,8 @@ if (isset($_SESSION['searchResult'])) {
     }
     ?>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

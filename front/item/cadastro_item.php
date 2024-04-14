@@ -70,7 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="row">
                     <div class="form-group espaco">
-                        <select name="selectGroup">
+                        <label for="selectGroup" style="color: white;">Categoria</label>
+                        <select class="form-select" aria-label="Default select example" name="selectGroup">
                             <option value="1">Tecnologia</option>
                             <option value="2">Roupa</option>
                             <option value="3">Utensílio</option>

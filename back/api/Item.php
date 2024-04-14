@@ -18,6 +18,7 @@ class Item
         $this->group = $group;
         $this->description = $description;
         $this->id_user = $id_user;
+        $this->group_description = '';
     }
     public function set_id($id)
     {
@@ -84,12 +85,13 @@ class ItemMethods
     public function search_item(String $itemName)
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-        $result = $conn->query("SELECT * FROM item WHERE nome_item LIKE '%$itemName%'");
+        $result = $conn->query("SELECT Item.*, Categoria_item.descricao as descricao_cat FROM Item INNER JOIN Categoria_item ON Item.fk_Categoria_item = Categoria_item.id_categoria WHERE nome_item LIKE '%$itemName%'");
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['fk_Categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
                 $item->set_id($row['id_item']);
+                $item->group_description = $row['descricao_cat'];
                 $data[] = $item;
             }
             return $data;
@@ -101,12 +103,13 @@ class ItemMethods
     public function get_user_item(int $id)
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-        $result = $conn->query("SELECT * FROM item WHERE fk_Usuario_id_usuario = $id");
+        $result = $conn->query("SELECT Item.*, Categoria_item.descricao as descricao_cat FROM Item INNER JOIN Categoria_item ON Item.fk_Categoria_item = Categoria_item.id_categoria WHERE fk_Usuario_id_usuario = $id");
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $item = new Item($row['nome_item'], $row['valor_item'], $row['disponivel'], $row['fk_Categoria_item'], $row['descricao'], $row['fk_Usuario_id_usuario']);
                 $item->set_id($row['id_item']);
+                $item->group_description = $row['descricao_cat'];
                 $data[] = $item;
             }
             return $data;

@@ -49,13 +49,15 @@
 session_start();
 require_once('autoload.php');
 $logado = $_SESSION['logado'] ?? null;
-$_SESSION['itemSearch'] ?? null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $_SESSION['itemSearch'] = true;
   if (isset($_POST['itemSearch'])) {
     $itemActions = new ItemMethods();
     $_SESSION['searchResult'] = $itemActions->search_item($_POST['itemSearch']);
   }
+}else {
+  $_SESSION['itemSearch'] = false;
 }
 ?>
 
