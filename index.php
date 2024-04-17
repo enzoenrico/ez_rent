@@ -61,7 +61,7 @@ if ($_SESSION['itemSearch']) {
 <body>
   <style>
     .card-size {
-      height: 400px;
+      height: 450px;
       width: 250px;
     }
 
