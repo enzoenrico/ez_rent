@@ -1,5 +1,4 @@
 <?php
-session_start();
 $_SESSION['url'] = 'C:\xampp\htdocs\ez_rent';
 require_once($_SESSION['url'] . '\autoload.php');
 
@@ -77,6 +76,8 @@ function update_item($userInfo)
         $item = new Item($name, $value,1, null, $desc, $userInfo['id']);
         $update = new ItemMethods();
         $update->update_item($item, $_POST['update_item']);
+        header("Location: /ez_rent/front/usuario/perfil/perfil.php");
+
     }
 }
 ?>

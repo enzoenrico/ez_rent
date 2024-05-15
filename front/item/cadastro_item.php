@@ -1,5 +1,4 @@
 <?php
-session_start();
 $_SESSION['url'] = 'C:\xampp\htdocs\ez_rent';
 require_once($_SESSION['url'] . '\autoload.php');
 

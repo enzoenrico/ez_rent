@@ -1,5 +1,4 @@
 <?php
-session_start();
 include(__DIR__ . '/front/navbar.php');
 require_once('autoload.php');
 
@@ -29,11 +28,11 @@ $itemActions = new ItemMethods();
 if ($_SESSION['itemSearch']) {
   if (isset($_SESSION['searchResult'])) {
     $items = $_SESSION['searchResult'];
-  }else{
+  } else {
     $items = $itemActions->get_all_items();
     echo '<div id="toast_search" class="toast" style="text-align: center; background-color: red !important;">';
-  echo '<strong> Nenhum item encontrado!</strong>';
-  echo "</div>
+    echo '<strong> Nenhum item encontrado!</strong>';
+    echo "</div>
   
   <script>
         // Função para mostrar o card toast
@@ -81,6 +80,16 @@ if ($_SESSION['itemSearch']) {
   </style>
   <div id="content" class="row">
     <?php
+    // for ($i = 0; $i < 40; $i++) {
+    //   echo '<div class="card" style="width: 18rem;">
+    //   <img src="..." class="card-img-top" alt="...">
+    //   <div class="card-body">
+    //     <h5 class="card-title">Card title</h5>
+    //     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>
+    //     <a href="#" class="btn btn-primary">Go somewhere</a>
+    //   </div>
+    // </div>';
+    // }
     if ($items !== null) {
       foreach ($items as $item) {
         if ($item->available == 1) {

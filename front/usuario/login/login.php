@@ -1,5 +1,7 @@
 <?php
 require('C:\xampp\htdocs\ez_rent\back\api\User.php');
+$_SESSION['url'] = 'C:\xampp\htdocs\ez_rent';
+require_once($_SESSION['url'] . '\autoload.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST['inputEmail'] != null && $_POST['inputPassword'] != null) {
@@ -11,7 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $action->get_user($pass, $userEmail);
 
         if ($user instanceof User) {
-            session_start();
             $_SESSION['user'] = [
                 'id' => $user->id,
                 'name' => $user->name,

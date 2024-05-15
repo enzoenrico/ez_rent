@@ -46,7 +46,6 @@
 
 <?php
 
-session_start();
 require_once('autoload.php');
 $logado = $_SESSION['logado'] ?? null;
 
