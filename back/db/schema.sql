@@ -18,7 +18,9 @@ CREATE TABLE Aluguel (
     id_aluguel int PRIMARY KEY AUTO_INCREMENT,
     data_hora_inicio date,
     data_hora_final date,
-    fk_Usuario_id_usuario int
+    fk_Usuario_id_usuario int,
+    fk_Item_id_item int,
+    fk_Locador_id_usuario int
 );
 CREATE TABLE Pedido (
     id_pedido int PRIMARY KEY AUTO_INCREMENT,
@@ -47,14 +49,14 @@ ADD CONSTRAINT FK_pertence_1 FOREIGN KEY (fk_Categoria_item_id_categoria) REFERE
 ALTER TABLE pertence
 ADD CONSTRAINT FK_pertence_2 FOREIGN KEY (fk_Item_id_item) REFERENCES Item (id_item) ON DELETE
 SET NULL;
+ADD CONSTRAINT FK_Item_aluguel FOREIGN KEY (fk_Item_id_item) REFERENCES Item (id_item) ON DELETE SET NULL;
+ALTER TABLE Aluguel
+    ADD CONSTRAINT FK_Aluguel_3 FOREIGN KEY (fk_Locador_id_usuario) REFERENCES Usuario (id_usuario) ON DELETE CASCADE;
 
 ALTER TABLE Item
     ADD COLUMN descricao varchar(200),
     ADD COLUMN imagem varchar(100),
     ADD COLUMN imagemExtensao varchar(10);
 
-ALTER TABLE Aluguel
-    ADD COLUMN fk_Locador_id_usuario int,
-    ADD CONSTRAINT FK_Aluguel_3 FOREIGN KEY (fk_Locador_id_usuario) REFERENCES Usuario (id_usuario) ON DELETE CASCADE;
 
 INSERT INTO categoria_item(id_categoria, descricao) VALUES (1, 'Tecnologia'), (2, 'Roupa'), (3, 'Utensílio');
