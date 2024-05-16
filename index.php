@@ -23,6 +23,11 @@ if (isset($_SESSION['logado']) && $_SESSION['logado']) {
   </script>";
 }
 
+if(isset($_POST['alugar_item'])){
+  $aluguelActions = new AluguelMethods();
+  $aluguelActions->add_Aluguel($_SESSION['user']['id'], $_POST['alugar_item']);
+}
+
 $itemActions = new ItemMethods();
 
 if ($_SESSION['itemSearch']) {
@@ -114,9 +119,28 @@ if ($_SESSION['itemSearch']) {
                         </div>
                         <div style="margin-bottom: 20px;">
                             <p style="margin: 0;"">Descrição: </p>
-                            <strong class="card-text">' . $item->description . '</strong>
+                            <strong class="card-text">' . $item->description. '</strong>
                         </div>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#alugar'. $item->get_id() .'">Alugar item</button>
+                        <form method="post">
+                            <div class="modal fade" id="alugar'. $item->get_id() .'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Alugar item</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Você deseja alugar este item?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" name="alugar_item" value="'. $item->get_id() .'" class="btn btn-primary">Alugar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>';
       }
