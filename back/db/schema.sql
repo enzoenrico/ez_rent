@@ -66,5 +66,5 @@ create table carrinho (
     fk_id_usuario int
 );
 ALTER TABLE carrinho
-ADD CONSTRAINT FK_id_item FOREIGN KEY (fk__id_item) REFERENCES Item (id_item) ON DELETE CASCADE,
+ADD CONSTRAINT FK_id_item FOREIGN KEY (fk_id_item) REFERENCES Item (id_item) ON DELETE CASCADE,
 ADD CONSTRAINT FK_id_usuario FOREIGN KEY (fk_id_usuario) REFERENCES Usuario (id_usuario) ON DELETE CASCADE;

@@ -61,14 +61,12 @@ class ItemMethods
         if (isset($_SESSION['logado'])) {
             if ($_SESSION['logado'] && isset($_SESSION['user'])) {
                 $id_usuario = $_SESSION['user']['id'];
-                $result = $conn->query("SELECT Item.*, Categoria_item.descricao as descricao_cat FROM Item 
+                $result = $conn->query("SELECT Item.*, Categoria_item.descricao AS descricao_cat 
+                FROM Item 
                 INNER JOIN Categoria_item ON Item.fk_Categoria_item = Categoria_item.id_categoria
-                LEFT JOIN carrinho cart on cart.fk_id_usuario = item.fk_Usuario_id_usuario
-                                            AND cart.fk_id_item = item.id_item
-                                            
-                WHERE cart.fk_id_usuario != '$id_usuario' OR cart.fk_id_usuario IS NULL
-                   AND cart.fk_id_item != (SELECT fk_id_item from carrinho where carrinho.fk_id_usuario = '$id_usuario') 
-                   OR cart.fk_id_item IS NULL;");
+                LEFT JOIN carrinho cart ON cart.fk_id_item = Item.id_item
+                                        AND cart.fk_id_usuario = '$id_usuario'
+                WHERE cart.fk_id_usuario IS NULL;");
                 $data = array();
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {

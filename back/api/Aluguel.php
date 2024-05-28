@@ -42,8 +42,9 @@ class AluguelMethods
     public function get_Carrinho(int $id_usuario)
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-        $result = $conn->query("SELECT DISTINCT Item.*, Categoria_item.descricao as descricao_cat FROM Item 
-        INNER JOIN carrinho on fk_id_usuario = item.fk_Usuario_id_usuario AND fk_id_item = item.id_item 
+        $result = $conn->query("SELECT DISTINCT Item.*, Categoria_item.descricao AS descricao_cat 
+        FROM Item 
+        LEFT JOIN carrinho ON carrinho.fk_id_item = item.id_item 
         INNER JOIN Categoria_item ON Item.fk_Categoria_item = Categoria_item.id_categoria 
         WHERE carrinho.fk_id_usuario = '$id_usuario';");
         $data = array();
