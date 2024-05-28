@@ -17,19 +17,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'telephone' => $user->telephone
+                'telephone' => $user->telephone,
+                'senha' => $user->get_pass()
             ];
+            $cart = new AluguelMethods();
+            $cart->checkCarrinho($_SESSION['user']['id']);
             $_SESSION['logado'] = true;
             header("Location: /ez_rent/index.php");
         } else {
-            echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">
-        Campos inválidos! Revise seus dados!
-      </div>';
+            echo '<div id="toast_search" class="toast" style="text-align: center; background-color: red !important;">';
+            echo '<strong> Campos inválidos! Tente novamente</strong>';
+            echo "</div>";
         }
     } else {
-        echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">
-    Campos inválidos! Revise seus dados!
-  </div>';
+        echo '<div id="toast_search" class="toast" style="text-align: center; background-color: red !important;">';
+        echo '<strong> Campos inválidos! Tente novamente</strong>';
+        echo "</div>";
     }
 }
 ?>

@@ -1,7 +1,6 @@
 body {
-    /* background: rgb(2, 0, 36);
-    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 5%, rgba(116, 9, 121, 1) 100%, rgba(0, 212, 255, 1) 100%); */
-    background-color: white;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 5%, rgba(116, 9, 121, 1) 100%, rgba(0, 212, 255, 1) 100%);
 }
 
 .perfil-columns {
@@ -69,14 +68,14 @@ body {
     }
 
     .items {
-        p{
+        p {
             margin: 0;
         }
     }
 
-    .content-wrap{
+    .content-wrap {
         display: flex;
         flex: 1;
     }
-    
+
 }

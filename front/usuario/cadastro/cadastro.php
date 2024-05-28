@@ -10,7 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $telefone = $_POST['inputTelefone'];
         $passwrd = md5($_POST['inputPassword']);
         $id = 20;
-
         $newUser = new User($id, $name, $email, $telefone);
         $newUser->set_pass($passwrd);
         if (UserMethods::set_user($newUser)) {
@@ -22,16 +21,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'telephone' => $user->telephone
+                    'telephone' => $user->telephone,
+                    'senha' => $user->get_pass()
                 ];
+
                 $_SESSION['logado'] = true;
                 header("Location: /ez_rent/index.php");
             }
+        } else {
+            echo '<div id="toast_search" class="toast" style="text-align: center; background-color: red !important;">';
+            echo '<strong> Este email já está sendo utilizado! Utilize outro email.</strong>';
+            echo "</div>";
         }
     } else {
-        echo '<div class="alert alert-danger" style="background-color: red; color: black;" role="alert">
-    Campos inválidos! Revise seus dados!
-  </div>';
+        echo '<div id="toast_search" class="toast" style="text-align: center; background-color: red !important;">';
+    echo '<strong> Campos inválidos! Tente novamente</strong>';
+    echo "</div>";
     }
 }
 ?>
@@ -73,7 +78,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label for="inputPassword4" style="color: white;">Senha</label>
                         <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Digite sua senha">
                     </div>
-                </div><br>
+                </div>
+                <br>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Salvar

@@ -4,20 +4,29 @@ require_once($_SESSION['url'] . '\autoload.php');
 
 $userInfo = $_SESSION['user'];
 $actions = new UserMethods();
-$itemActions = new ItemMethods();
 
-if ($itemActions->get_user_item($_SESSION['user']['id']) !== null) {
-    $items = $itemActions->get_user_item($_SESSION['user']['id']);
-} else {
-    $items = null;
+function getItems()
+{
+    $itemActions = new ItemMethods();
+    if ($itemActions->get_user_item($_SESSION['user']['id']) !== null) {
+        $items = $itemActions->get_user_item($_SESSION['user']['id']);
+    } else {
+        $items = null;
+    }
+    return $items;
 }
+
+$items = getItems();
+$cart = new AluguelMethods();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['logout'])) {
+        $cart->delete_Carrinho(null, $userInfo['id']);
         logout();
     } else if (isset($_POST['update'])) {
         update_user($actions, $userInfo);
     } else if (isset($_POST['delete_user'])) {
+        $cart->delete_Carrinho(null, $userInfo['id']);
         $actions->delete_user($userInfo['id']);
         session_destroy();
         header("Location: /ez_rent/index.php");
@@ -39,6 +48,7 @@ function delete_item($id)
 {
     $delete = new ItemMethods();
     $delete->delete_item($id);
+    header("Location: /ez_rent/front/usuario/perfil/perfil.php");
 }
 
 function update_user($actions, $userInfo)
@@ -73,11 +83,11 @@ function update_item($userInfo)
         $name = $_POST['nameItem'];
         $value = $_POST['valueItem'];
         $desc = $_POST['desc'];
-        $item = new Item($name, $value,1, null, $desc, $userInfo['id']);
+        $item = new Item($name, $value, 1, null, $desc, $userInfo['id']);
         $update = new ItemMethods();
         $update->update_item($item, $_POST['update_item']);
+        echo $update->update_item($item, $_POST['update_item']);
         header("Location: /ez_rent/front/usuario/perfil/perfil.php");
-
     }
 }
 ?>
@@ -210,7 +220,9 @@ function update_item($userInfo)
                         </div>
                         <div style="text-align: start;" class="form-group col-md-6 espaco ">
                             <label for="inputPassword4" style="color: white;">Senha</label>
-                            <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Digite sua nova senha">
+                            <?php
+                            echo '<input type="password" class="form-control" id="inputPassword" value="' . $userInfo['senha'] . '" name="inputPassword" placeholder="Digite sua nova senha">';
+                            ?>
                         </div>
                     </div><br>
                     <!-- Button trigger modal -->
@@ -254,7 +266,7 @@ function update_item($userInfo)
                     } else {
                         $ava = "Indisponível";
                     }
-                    echo '" <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content; margin: 10px;">
+                    echo ' <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content; margin: 10px;">
                         <div class="card-body">
                             <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
                             <div  style="margin-bottom: 20px;">
@@ -267,11 +279,13 @@ function update_item($userInfo)
                             </div>
                             <div style="margin-bottom: 20px;">
                             <p style="margin: 0;">Categoria: </p>
-                            <strong class="card-text">'. $item->group_description .'</strong>
+                            <strong class="card-text">' . $item->group_description . '</strong>
                             </div>
                             <div style="margin-bottom: 20px;">
                             <p style="margin: 0;">Descrição: </p>
-                            <strong class="card-text">' . $item->description . '</strong>
+                            <div class="form-floating">
+                            <textarea class="form-control" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
+                            </div>
                             </div>
                             <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete_item_' . $item->get_id() . '">
                             Deletar item
@@ -323,7 +337,7 @@ function update_item($userInfo)
                                         <div style="text-align: start;" class="form-group col-md-6 espaco ">
                                             <label>Categoria</label>
                                             <select class="form-select" aria-label="Default select example" name="selectGroup" >
-                                            <option selected> '. $item->group_description .' </option>
+                                            <option selected> ' . $item->group_description . ' </option>
                                             <option value="1">Tecnologia</option>
                                             <option value="2">Roupa</option>
                                             <option value="3">Utensílio</option>
@@ -358,7 +372,6 @@ function update_item($userInfo)
         <!-- FIM MOSTRAR ITENS -->
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>

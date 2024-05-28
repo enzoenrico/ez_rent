@@ -27,6 +27,15 @@ class User
 
 class UserMethods
 {
+
+    public function set_mensagemlogin($n)
+    {
+        $_SESSION['teste'] = $n;
+    }
+    public function get_mensagemlogin(): int
+    {
+        return $_SESSION['teste'];
+    }
     /**
      * This PHP function retrieves all records from the "usuario" table in a database.
      * 
@@ -46,11 +55,12 @@ class UserMethods
      * @param int $id The ID of the user to retrieve.
      * @return User|Error The user object if found, or an error object if not found.
      */
-    public function get_user($pass, $userEmail): User|Error {
+    public function get_user($pass, $userEmail): User|Error
+    {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-        
+
         $result = $conn->query("SELECT * FROM usuario WHERE email_usuario = '$userEmail' AND senha_usuario = '$pass'");
-        
+
         if ($result) {
             if ($result->num_rows > 0) {
                 $data = $result->fetch_assoc();
@@ -80,12 +90,21 @@ class UserMethods
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
 
         $passwd = $user01->get_pass();
-        try {
-            $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user01->telephone', '$user01->name', '$user01->email', '$user01->telephone', '$passwd')";
-            $conn->query($sql);
-            return true;
-        } catch (\Throwable $th) {
-            return false;
+        $sql = "SELECT * FROM usuario WHERE email_usuario = '$user01->email'";
+        $result = $conn->query($sql);
+
+        if ($result) {
+            if ($result->num_rows == 0) {
+                try {
+                    $sql = "INSERT INTO usuario (id_usuario, nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES ('$user01->telephone', '$user01->name', '$user01->email', '$user01->telephone', '$passwd')";
+                    $conn->query($sql);
+                    return true;
+                } catch (\Throwable $th) {
+                    return false;
+                }
+            }else {
+                return false;
+            }
         }
     }
 
@@ -103,6 +122,7 @@ class UserMethods
     public function delete_user($id): bool
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
+        ItemMethods::delete_user_item($id);
         $sql = "DELETE FROM usuario WHERE id_usuario = '$id'";
         if ($conn->query($sql) === TRUE) {
             return true;
@@ -128,7 +148,8 @@ class UserMethods
     public function update_user(User $user02, int $search_id): bool
     {
         include 'C:\xampp\htdocs\ez_rent\back\connection.php';
-        $sql = "UPDATE usuario SET nome_usuario = '$user02->name', email_usuario = '$user02->email', telefone_usuario = '$user02->telephone' WHERE id_usuario = '$search_id'";
+        $pass = $user02->get_pass();
+        $sql = "UPDATE usuario SET nome_usuario = '$user02->name', email_usuario = '$user02->email', telefone_usuario = '$user02->telephone', senha_usuario = '$pass' WHERE id_usuario = '$search_id'";
         if ($conn->query($sql) === TRUE) {
             return true;
         } else {

@@ -3,3 +3,38 @@
 ::-webkit-scrollbar{
     visibility: hidden;
 }
+
+.roll-back {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 35px;
+    width: 100%;
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .roll-back-btn {
+        background-color: #846FB0;
+    }
+
+    .items {
+        p{
+            margin: 0;
+        }
+    }
+
+    .content-wrap{
+        display: flex;
+        flex: 1;
+    }
+    
+}
+
+.carrinho {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
