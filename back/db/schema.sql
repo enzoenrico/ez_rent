@@ -12,12 +12,12 @@ CREATE TABLE Item (
     disponivel boolean,
     fk_Categoria_item int,
     fk_Usuario_id_usuario int,
-    fk_Pedido_id_pedido int
+    fk_Pedido_id_pedido int,
+    data_inicio date,
+    data_final date
 );
 CREATE TABLE Aluguel (
     id_aluguel int PRIMARY KEY AUTO_INCREMENT,
-    data_hora_inicio date,
-    data_hora_final date,
     fk_Usuario_id_usuario int,
     fk_Item_id_item int,
     fk_Locador_id_usuario int
@@ -49,6 +49,7 @@ ADD CONSTRAINT FK_pertence_1 FOREIGN KEY (fk_Categoria_item_id_categoria) REFERE
 ALTER TABLE pertence
 ADD CONSTRAINT FK_pertence_2 FOREIGN KEY (fk_Item_id_item) REFERENCES Item (id_item) ON DELETE
 SET NULL;
+ALTER TABLE Aluguel
 ADD CONSTRAINT FK_Item_aluguel FOREIGN KEY (fk_Item_id_item) REFERENCES Item (id_item) ON DELETE SET NULL;
 ALTER TABLE Aluguel
     ADD CONSTRAINT FK_Aluguel_3 FOREIGN KEY (fk_Locador_id_usuario) REFERENCES Usuario (id_usuario) ON DELETE CASCADE;

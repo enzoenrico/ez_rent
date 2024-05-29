@@ -20,14 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
     } else {
         $value = floatval($_POST['inputValue']);
-        if ($_POST['inputName'] != null && $_POST['inputValue'] != null && $_POST['inputDesc'] != null && $_POST['selectGroup'] != null) {
+        if ($_POST['inputName'] != null && $_POST['inputValue'] != null && $_POST['inputDesc'] != null && $_POST['selectGroup'] != null && $_POST['data']) {
             $name = $_POST['inputName'];
             $group = $_POST['selectGroup'];
             $description = $_POST['inputDesc'];
-            echo $group;
-
+            $dataFinal = new DateTime($_POST['data']);
             $newItem = new Item($name, $value, 1, $group, $description, $_SESSION['user']['id']);
-            if ($actions->add_item($newItem)) {
+            if ($actions->add_item($newItem, $dataFinal)) {
                 echo '<div class="alert alert-sucess alert-dismissible fade show" color: black;" role="alert">
                     Item adicionado com sucesso! Clique em itens cadastrados para ver.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
@@ -82,7 +81,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label for="inputPassword4" style="color: white;">Descrição</label>
                         <input type="text" class="form-control" id="inputDesc" name="inputDesc" placeholder="Digite a descrição do item">
                     </div>
-                </div><br>
+                </div>
+                <div class="mb-3">
+                    <label for="dataHoraInput" style="color: white;" class="form-label">Data limite do aluguel</label>
+                    <input type="datetime-local" class="form-control" id="dataHoraInput" name="data">
+                    <div id="error-msg" style="color: red;"></div>
+                </div>
+                <br>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Salvar
@@ -112,6 +117,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+    <script>
+        document.getElementById('dataHoraInput').addEventListener('change', function() {
+            var selectedDateTime = new Date(this.value);
+            var currentDateTime = new Date();
+
+            if (selectedDateTime < currentDateTime) {
+                document.getElementById('error-msg').innerText = 'Por favor, selecione uma data futura.';
+                this.value = '';
+            } else {
+                document.getElementById('error-msg').innerText = '';
+            }
+        });
+    </script>
 </body>
 
 </html>

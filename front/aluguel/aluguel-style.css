@@ -1,0 +1,33 @@
+.roll-back {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 20px;
+    padding-left: 20px;
+    width: 100%;
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .roll-back-btn {
+        background-color: #846FB0;
+    }
+
+    .items {
+        p {
+            margin: 0;
+        }
+    }
+
+    .content-wrap {
+        display: flex;
+        flex: 1;
+    }
+}
+
+body {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 5%, rgba(116, 9, 121, 1) 100%, rgba(0, 212, 255, 1) 100%);
+}

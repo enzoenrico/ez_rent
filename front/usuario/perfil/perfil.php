@@ -5,6 +5,7 @@ require_once($_SESSION['url'] . '\autoload.php');
 $userInfo = $_SESSION['user'];
 $actions = new UserMethods();
 
+
 function getItems()
 {
     $itemActions = new ItemMethods();
@@ -16,6 +17,18 @@ function getItems()
     return $items;
 }
 
+function getItemsAluguel()
+{
+    $itemActions = new ItemMethods();
+    if ($itemActions->get_aluguel_items($_SESSION['user']['id']) !== null) {
+        $itensAluguel = $itemActions->get_aluguel_items($_SESSION['user']['id']);
+    } else {
+        $itensAluguel = null;
+    }
+    return $itensAluguel;
+}
+
+$itensAluguel = getItemsAluguel();
 $items = getItems();
 $cart = new AluguelMethods();
 
@@ -34,6 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         delete_item($_POST['delete_item']);
     } else if (isset($_POST['update_item'])) {
         update_item($userInfo);
+    } else if (isset($_POST['cancel_aluguel'])) {
+        $itensAluguel = delete_aluguel($_POST['cancel_aluguel'], $userInfo['id']);
     }
 }
 
@@ -79,16 +94,28 @@ function update_user($actions, $userInfo)
 
 function update_item($userInfo)
 {
-    if ($_POST['nameItem'] != null && $_POST['valueItem'] != null && $_POST['desc'] != null) {
+    if ($_POST['nameItem'] != null && $_POST['valueItem'] != null && $_POST['desc'] != null && $_POST['dataInicio'] != null && $_POST['dataFinal'] != null) {
         $name = $_POST['nameItem'];
         $value = $_POST['valueItem'];
         $desc = $_POST['desc'];
         $item = new Item($name, $value, 1, null, $desc, $userInfo['id']);
         $update = new ItemMethods();
-        $update->update_item($item, $_POST['update_item']);
-        echo $update->update_item($item, $_POST['update_item']);
+        $dataInicio = new DateTime($_POST['dataInicio']);
+        $dataFinal = new DateTime($_POST['dataFinal']);
+        $update->update_item($item, $_POST['update_item'], $dataInicio, $dataFinal);
         header("Location: /ez_rent/front/usuario/perfil/perfil.php");
+    }else {
+        echo '<div id="toast_search" class="toast" style="text-align: center; background-color: red !important;">';
+        echo '<strong>Preencha todos os campos para alterar anúncio!</strong>';
+        echo "</div>";
     }
+}
+
+function delete_aluguel($id_item, $id_usuario)
+{
+    $aluguelMethods = new AluguelMethods();
+    $aluguelMethods->cancelar_aluguel($id_item, $id_usuario);
+    getItemsAluguel();
 }
 ?>
 
@@ -112,8 +139,8 @@ function update_item($userInfo)
                         <a href="/ez_rent/index.php">Voltar</a>
                     </div>
                 </div>
-                <div class="perfil-box">
-                    <h2 style="color: white;">Suas Informações:</h2>
+                <div class="perfil-box col">
+                    <h2 style="color: white;" class="col">Suas Informações:</h2>
                     <div class="col infos">
                         <?php
                         echo '<div class=" teste2">
@@ -158,7 +185,10 @@ function update_item($userInfo)
                     </div>
                     <div>
                         <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#itens" aria-expanded="false" aria-controls="collapseWidthExample">
-                            Itens cadastrados
+                            Meus itens
+                        </button>
+                        <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#alugueis" aria-expanded="false" aria-controls="collapseWidthExample">
+                            Meus alugueis
                         </button>
                     </div>
                     <div style="margin-top: 10px;">
@@ -258,6 +288,7 @@ function update_item($userInfo)
         <!-- INICIO MOSTRAR ITENS -->
 
         <div class="row teste collapse content-wrap items" style="margin-top: 30px; height: auto; text-align: start; overflow: auto;" id="itens">
+            <h1 style="text-align: center; color: white;">Meus itens</h1>
             <?php
             if ($items !== null) {
                 foreach ($items as $item) {
@@ -285,6 +316,10 @@ function update_item($userInfo)
                             <p style="margin: 0;">Descrição: </p>
                             <div class="form-floating">
                             <textarea class="form-control" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                            <p style="margin: 0;">Data limite do aluguel: </p>
+                            <strong class="card-text">' . $item->dataFinal . '</strong>
                             </div>
                             </div>
                             <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete_item_' . $item->get_id() . '">
@@ -347,6 +382,16 @@ function update_item($userInfo)
                                             <label>Descrição</label>
                                             <input type="text" value="' . $item->description . '" class="form-control" id="inputEmail" name="desc">
                                         </div>
+                                        <div class="mb-3">
+                                        <label for="dataHoraInput" style="color: white;" class="form-label">Data início do aluguel</label>
+                                        <input type="datetime-local" class="form-control" id="dataHoraInput" name="dataInicio" value="'.$item->dataInicio.'">
+                                        <div id="error-msg" style="color: red;"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                        <label for="dataHoraInput" style="color: white;" class="form-label">Data limite do aluguel</label>
+                                        <input type="datetime-local" class="form-control" id="dataHoraInput" name="dataFinal" value="'.$item->dataFinal.'">
+                                        <div id="error-msg" style="color: red;"></div>
+                                        </div>
                                     </div>
                                         </div>
                                         <div class="modal-footer">
@@ -370,7 +415,89 @@ function update_item($userInfo)
         </div>
 
         <!-- FIM MOSTRAR ITENS -->
+        <div class="row teste collapse content-wrap items" style="margin-top: 30px; height: auto; text-align: start; overflow: auto;" id="alugueis">
+            <h1 style="text-align: center; color: white;">Meus alugueis</h1>
+            <?php
+            if ($itensAluguel !== null) {
+                foreach ($itensAluguel as $item) {
+                    if ($item->available == 1) {
+                        $ava = "Disponível";
+                    } else {
+                        $ava = "Indisponível";
+                    }
+                    echo ' <div class="card" style="width: 18rem; height: fit-content; max-height: fit-content; margin: 10px;">
+                            <div class="card-body">
+                                <h5 class="card-title" style="text-transform: uppercase;">' . $item->name . '</h5>
+                                <div  style="margin-bottom: 20px;">
+                                <p style="margin: 0;">Valor do aluguel: </p>
+                                <strong class="card-text">R$' . $item->value . '</strong>
+                                </div>
+                                <div style="margin-bottom: 20px;">
+                                <p style="margin: 0;"">Disponibilidade: </p>
+                                <strong class="card-text">' . $ava . '</strong>
+                                </div>
+                                <div style="margin-bottom: 20px;">
+                                <p style="margin: 0;">Categoria: </p>
+                                <strong class="card-text">' . $item->group_description . '</strong>
+                                </div>
+                                <div style="margin-bottom: 20px;">
+                                <p style="margin: 0;">Descrição: </p>
+                                <div class="form-floating">
+                                <textarea class="form-control" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
+                                </div>
+                                <div style="margin-bottom: 20px;">
+                                <p style="margin: 0;">Data limite do aluguel: </p>
+                                <strong class="card-text">' . $item->dataFinal . '</strong>
+                                </div>
+                                </div>
+                                <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete_alu_' . $item->get_id() . '">
+                                Cancelar aluguel
+                            </button>
+                            </form>
+                            </div>
+                                <form method="post">
+                                    <div class="modal fade" id="delete_alu_' . $item->get_id() . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">Cancelar aluguel</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Você deseja cancelar o aluguel?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                                                <button type="submit" name="cancel_aluguel" value="' . $item->get_id() . '" class="btn btn-primary">Cancelar</button>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                </form>
+                            </div>';
+                }
+            } else {
+                echo '<h1 style="text-align: center; color: white;">Nenhum item disponível!</h1>';
+            }
+            ?>
+        </div>
+
+        <!-- FIM MOSTRAR ITENS -->
     </div>
+
+    <script>
+        document.getElementById('dataHoraInput').addEventListener('change', function() {
+            var selectedDateTime = new Date(this.value);
+            var currentDateTime = new Date();
+
+            if (selectedDateTime < currentDateTime) {
+                document.getElementById('error-msg').innerText = 'Por favor, selecione uma data futura.';
+                this.value = '';
+            } else {
+                document.getElementById('error-msg').innerText = '';
+            }
+        });
+    </script>
 
 </body>
 

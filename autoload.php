@@ -20,4 +20,16 @@ require_once(__ROOT__ . '/back/api/Aluguel.php');
     window.onload = function() {
         showToast();
     };
+
+    document.getElementById('dataHoraInput').addEventListener('change', function() {
+        var selectedDateTime = new Date(this.value);
+        var currentDateTime = new Date();
+
+        if (selectedDateTime < currentDateTime) {
+            document.getElementById('error-msg').innerText = 'Por favor, selecione uma data futura.';
+            this.value = '';
+        } else {
+            document.getElementById('error-msg').innerText = '';
+        }
+    });
 </script>

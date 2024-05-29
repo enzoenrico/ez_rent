@@ -52,6 +52,10 @@ if (isset($_POST['tirarcarrinho'])) {
   $carrinhoActions->delete_Carrinho($_POST['tirarcarrinho'], $_SESSION['user']['id']);
   $items = $itemActions->get_all_items();
   $carrinho = $carrinhoActions->get_Carrinho($_SESSION['user']['id']);
+} else {
+  if (isset($_SESSION['user'])) {
+    $carrinho = $carrinhoActions->get_Carrinho($_SESSION['user']['id']);
+  }
 }
 
 ?>
@@ -165,6 +169,7 @@ if (isset($_POST['tirarcarrinho'])) {
                     <th>Valor</th>
                     <th>Categoria</th>
                     <th>Descrição</th>
+                    <th>Data limite do aluguel</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
@@ -177,6 +182,7 @@ if (isset($_POST['tirarcarrinho'])) {
                         <td>R$' . $item->value . '</td>
                         <td>' . $item->group_description . '</td>
                         <td><textarea class="form-control" name="descItem" id="floatingTextarea" style="resize: none; height: 100px; padding-top: 0px;" disabled> ' . $item->description . '</textarea></td>
+                        <td>' . $item->dataFinal . '</td>
                         <td>
                             <form method="post">
                                 <button type="submit" name="tirarcarrinho" class="btn btn-danger" value="' . $item->get_id() . '">
@@ -200,7 +206,15 @@ if (isset($_POST['tirarcarrinho'])) {
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-            <button type="submit" name="update_item" value="" class="btn btn-primary">Salvar</button>
+            <?php
+            if (isset($_SESSION['logado'])) {
+              if ($_SESSION['logado']) {
+                echo '<form action="./front/aluguel/aluguel.php">
+                    <button type="submit" value="" class="btn btn-primary">Alugar</button>
+                </form>';
+              }
+            }
+            ?>
           </div>
         </div>
       </div>
@@ -234,7 +248,12 @@ if (isset($_POST['tirarcarrinho'])) {
             <p style="margin: 0;"">Descrição: </p>
             <div class="form-floating">
             <textarea class="form-control" name="descItem" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
-            </div>                        </div>
+            </div>   
+            <div style="margin-bottom: 20px;">
+            <p style="margin: 0;"">Data limite do aluguel: </p>
+            <strong class="card-text" name="catItem">' . $item->get_data_final() . '</strong>
+            </div>                     
+            </div>
             <div>
             <form method="post">
             <button class="btn btn-success" type="submit" name="carrinho" value="' . $item->get_id() . '">Adicionar ao carrinho +</button>
@@ -242,6 +261,8 @@ if (isset($_POST['tirarcarrinho'])) {
             </div>
             </div>
             </div>';
+          } else {
+            echo '<h1 style="text-align: center;">Nenhum item disponível!</h1>';
           }
         } else {
           if ($item->available == 1) {
@@ -265,7 +286,12 @@ if (isset($_POST['tirarcarrinho'])) {
             <p style="margin: 0;"">Descrição: </p>
             <div class="form-floating">
             <textarea class="form-control" name="descItem" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
-            </div>                        </div>
+            </div>
+            <div style="margin-bottom: 20px;">
+            <p style="margin: 0;"">Data limite do aluguel: </p>
+            <strong class="card-text" name="catItem">' . $item->get_data_final() . '</strong>
+            </div>                         
+            </div>
             <div>
             <form method="post">
             <button class="btn btn-success" type="submit" name="carrinho" value="' . $item->get_id() . '">Adicionar ao carrinho +</button>
