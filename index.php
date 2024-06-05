@@ -225,82 +225,86 @@ if (isset($_POST['tirarcarrinho'])) {
   <div id="content" class="row">
     <?php
     if ($items !== null) {
-      foreach ($items as $item) {
-        if (isset($_SESSION['logado'])) {
-          if ($item->available == 1 && $_SESSION['logado']) {
-            $ava = "Disponível";
-            echo ' <div class="card card-size" >
-            <div class="card-body">
-            <h5 class="card-title" style="text-transform: uppercase;" name="nomeItem">' . $item->name . '</h5>
-            <div  style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Valor do aluguel: </p>
-            <strong class="card-text" name="valorItem">R$' . $item->value . '</strong>
-            </div>
-            <div style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Disponibilidade: </p>
-            <strong class="card-text" name="dispItem">' . $ava . '</strong>
-            </div>
-            <div style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Categoria: </p>
-            <strong class="card-text" name="catItem">' . $item->group_description . '</strong>
-            </div>
-            <div style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Descrição: </p>
-            <div class="form-floating">
-            <textarea class="form-control" name="descItem" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
-            </div>   
-            <div style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Data limite do aluguel: </p>
-            <strong class="card-text" name="catItem">' . $item->get_data_final() . '</strong>
-            </div>                     
-            </div>
-            <div>
-            <form method="post">
-            <button class="btn btn-success" type="submit" name="carrinho" value="' . $item->get_id() . '">Adicionar ao carrinho +</button>
-            </form>
-            </div>
-            </div>
-            </div>';
+      if (sizeof($items) != 0) {
+        foreach ($items as $item) {
+          if (isset($_SESSION['logado'])) {
+            if ($item->available == 1 && $_SESSION['logado']) {
+              $ava = "Disponível";
+              echo ' <div class="card card-size" >
+              <div class="card-body">
+              <h5 class="card-title" style="text-transform: uppercase;" name="nomeItem">' . $item->name . '</h5>
+              <div  style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Valor do aluguel: </p>
+              <strong class="card-text" name="valorItem">R$' . $item->value . '</strong>
+              </div>
+              <div style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Disponibilidade: </p>
+              <strong class="card-text" name="dispItem">' . $ava . '</strong>
+              </div>
+              <div style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Categoria: </p>
+              <strong class="card-text" name="catItem">' . $item->group_description . '</strong>
+              </div>
+              <div style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Descrição: </p>
+              <div class="form-floating">
+              <textarea class="form-control" name="descItem" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
+              </div>   
+              <div style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Data limite do aluguel: </p>
+              <strong class="card-text" name="catItem">' . $item->get_data_final() . '</strong>
+              </div>                     
+              </div>
+              <div>
+              <form method="post">
+              <button class="btn btn-success" type="submit" name="carrinho" value="' . $item->get_id() . '">Adicionar ao carrinho +</button>
+              </form>
+              </div>
+              </div>
+              </div>';
+            } else {
+              echo '<h1 style="text-align: center;">Nenhum item disponível!</h1>';
+            }
           } else {
-            echo '<h1 style="text-align: center;">Nenhum item disponível!</h1>';
-          }
-        } else {
-          if ($item->available == 1) {
-            $ava = "Disponível";
-            echo ' <div class="card card-size" >
-            <div class="card-body">
-            <h5 class="card-title" style="text-transform: uppercase;" name="nomeItem">' . $item->name . '</h5>
-            <div  style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Valor do aluguel: </p>
-            <strong class="card-text" name="valorItem">R$' . $item->value . '</strong>
-            </div>
-            <div style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Disponibilidade: </p>
-            <strong class="card-text" name="dispItem">' . $ava . '</strong>
-            </div>
-            <div style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Categoria: </p>
-            <strong class="card-text" name="catItem">' . $item->group_description . '</strong>
-            </div>
-            <div style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Descrição: </p>
-            <div class="form-floating">
-            <textarea class="form-control" name="descItem" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
-            </div>
-            <div style="margin-bottom: 20px;">
-            <p style="margin: 0;"">Data limite do aluguel: </p>
-            <strong class="card-text" name="catItem">' . $item->get_data_final() . '</strong>
-            </div>                         
-            </div>
-            <div>
-            <form method="post">
-            <button class="btn btn-success" type="submit" name="carrinho" value="' . $item->get_id() . '">Adicionar ao carrinho +</button>
-            </form>
-            </div>
-            </div>
-            </div>';
+            if ($item->available == 1) {
+              $ava = "Disponível";
+              echo ' <div class="card card-size" >
+              <div class="card-body">
+              <h5 class="card-title" style="text-transform: uppercase;" name="nomeItem">' . $item->name . '</h5>
+              <div  style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Valor do aluguel: </p>
+              <strong class="card-text" name="valorItem">R$' . $item->value . '</strong>
+              </div>
+              <div style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Disponibilidade: </p>
+              <strong class="card-text" name="dispItem">' . $ava . '</strong>
+              </div>
+              <div style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Categoria: </p>
+              <strong class="card-text" name="catItem">' . $item->group_description . '</strong>
+              </div>
+              <div style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Descrição: </p>
+              <div class="form-floating">
+              <textarea class="form-control" name="descItem" id="floatingTextarea" style="resize: none; height: 200px; padding-top: 0px;" disabled> ' . $item->description . '</textarea>
+              </div>
+              <div style="margin-bottom: 20px;">
+              <p style="margin: 0;"">Data limite do aluguel: </p>
+              <strong class="card-text" name="catItem">' . $item->get_data_final() . '</strong>
+              </div>                         
+              </div>
+              <div>
+              <form method="post">
+              <button class="btn btn-success" type="submit" name="carrinho" value="' . $item->get_id() . '">Adicionar ao carrinho +</button>
+              </form>
+              </div>
+              </div>
+              </div>';
+            }
           }
         }
+      } else {
+        echo '<h1 style="text-align: center;">Nenhum item disponível!</h1>';
       }
     } else {
       echo '<h1 style="text-align: center;">Nenhum item disponível!</h1>';

@@ -122,7 +122,7 @@ class AluguelMethods
                 $id = $row['id_aluguel'];
                 $sql2 = "DELETE FROM Aluguel WHERE id_aluguel = $id";
                 if ($conn->query($sql2) === true) {
-                    $sql3 = "UPDATE Item SET disponivel = true WHERE id_item = $id_item";
+                    $sql3 = "UPDATE Item SET disponivel = 1 WHERE id_item = $id_item";
                     if ($conn->query($sql3) === true) {
                         return true;
                     }

@@ -86,7 +86,8 @@ class ItemMethods
                     FROM carrinho 
                     WHERE fk_id_usuario = '$id_usuario'
                 )
-                AND Item.fk_Usuario_id_usuario <> '$id_usuario';
+                AND Item.fk_Usuario_id_usuario <> '$id_usuario'
+                AND Item.disponivel = 1;
                 ");
                 $data = array();
                 if ($result->num_rows > 0) {
@@ -104,7 +105,7 @@ class ItemMethods
                 }
             }
         } else {
-            $result = $conn->query("SELECT Item.*, Categoria_item.descricao as descricao_cat FROM Item INNER JOIN Categoria_item ON Item.fk_Categoria_item = Categoria_item.id_categoria;");
+            $result = $conn->query("SELECT Item.*, Categoria_item.descricao as descricao_cat FROM Item INNER JOIN Categoria_item ON Item.fk_Categoria_item = Categoria_item.id_categoria WHERE Item.disponivel = 1;");
             $data = array();
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -202,7 +203,7 @@ class ItemMethods
         $dataFinalFormatada = $dataFinal->format('Y-m-d');
 
         try {
-            $sql = "UPDATE item SET nome_item = '$i->name', valor_item = '$i->value', descricao = '$i->description', data_inicio = '$dataAtualFormatada', data_final = '$dataFinalFormatada' WHERE id_item = '$id'";
+            $sql = "UPDATE item SET nome_item = '$i->name',disponivel = '$i->available', valor_item = '$i->value', descricao = '$i->description', data_inicio = '$dataAtualFormatada', data_final = '$dataFinalFormatada' WHERE id_item = '$id'";
             $conn->query($sql);
         } catch (\Throwable $th) {
             echo $th;

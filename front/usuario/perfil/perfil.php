@@ -94,17 +94,29 @@ function update_user($actions, $userInfo)
 
 function update_item($userInfo)
 {
-    if ($_POST['nameItem'] != null && $_POST['valueItem'] != null && $_POST['desc'] != null && $_POST['dataInicio'] != null && $_POST['dataFinal'] != null) {
+    if ($_POST['nameItem'] != null && $_POST['valueItem'] != null && $_POST['desc'] != null && $_POST['dataInicio'] != null && $_POST['dataFinal'] != null && $_POST['dispo'] != null) {
         $name = $_POST['nameItem'];
         $value = $_POST['valueItem'];
         $desc = $_POST['desc'];
-        $item = new Item($name, $value, 1, null, $desc, $userInfo['id']);
+        $disp = $_POST['dispo'];
+        echo $disp;
+        if ($disp === 1) {
+            $ava = "Disponível";
+            $dispItem = true;
+        } else {
+            $ava = "Indisponível";
+            $dispItem = false;
+        }
+        $item = new Item($name, $value, $dispItem, null, $desc, $userInfo['id']);
         $update = new ItemMethods();
         $dataInicio = new DateTime($_POST['dataInicio']);
         $dataFinal = new DateTime($_POST['dataFinal']);
         $update->update_item($item, $_POST['update_item'], $dataInicio, $dataFinal);
-        header("Location: /ez_rent/front/usuario/perfil/perfil.php");
-    }else {
+        // header("Location: /ez_rent/front/usuario/perfil/perfil.php");
+        echo '<div id="toast_search" class="toast" style="text-align: center; background-color: green !important;">';
+        echo '<strong>Item '.$name.' agora está '.$ava.'!</strong>';
+        echo "</div>";
+    } else {
         echo '<div id="toast_search" class="toast" style="text-align: center; background-color: red !important;">';
         echo '<strong>Preencha todos os campos para alterar anúncio!</strong>';
         echo "</div>";
@@ -140,19 +152,19 @@ function delete_aluguel($id_item, $id_usuario)
                     </div>
                 </div>
                 <div class="perfil-box col">
-                    <h2 style="color: white;" class="col">Suas Informações:</h2>
                     <div class="col infos">
+                        <h2 style="color: white;" class="col">Suas Informações:</h2>
                         <?php
                         echo '<div class=" teste2">
-                            <h5>Nome:</h5> 
-                            <span>' . $userInfo['name'] . '</span> 
+                            <h5 style="font-size: 12px">Nome:</h5> 
+                            <span style="font-size: 12px">' . $userInfo['name'] . '</span> 
                         </div>
                 
-                            <div class=" teste2 "><h5>
-                            Email:</h5> <span>' . $userInfo['email'] . '</span>                         
+                            <div class=" teste2 "><h5 style="font-size: 12px">
+                            Email:</h5> <span style="font-size: 12px">' . $userInfo['email'] . '</span>                         
                             </div>
-                            <div class=" teste2"><h5>
-                            Telefone:</h5> <span>' . $userInfo['telephone'] . '</span>                         
+                            <div class=" teste2"><h5 style="font-size: 12px">
+                            Telefone:</h5> <span style="font-size: 12px">' . $userInfo['telephone'] . '</span>                         
                             </div>';
                         ?>
                     </div>
@@ -379,19 +391,29 @@ function delete_aluguel($id_item, $id_usuario)
                                         </select>
                                         </div>
                                         <div style="text-align: start;" class="form-group col-md-6 espaco ">
-                                            <label>Descrição</label>
+                                        <label>Descrição</label>
                                             <input type="text" value="' . $item->description . '" class="form-control" id="inputEmail" name="desc">
                                         </div>
                                         <div class="mb-3">
-                                        <label for="dataHoraInput" style="color: white;" class="form-label">Data início do aluguel</label>
-                                        <input type="datetime-local" class="form-control" id="dataHoraInput" name="dataInicio" value="'.$item->dataInicio.'">
+                                        <label for="dataHoraInput" style="color: black;" class="form-label">Data início do aluguel</label>
+                                        <input type="datetime-local" class="form-control" id="dataHoraInput" name="dataInicio" value="' . $item->dataInicio . '">
                                         <div id="error-msg" style="color: red;"></div>
                                         </div>
                                         <div class="mb-3">
-                                        <label for="dataHoraInput" style="color: white;" class="form-label">Data limite do aluguel</label>
-                                        <input type="datetime-local" class="form-control" id="dataHoraInput" name="dataFinal" value="'.$item->dataFinal.'">
+                                        <label for="dataHoraInput" style="color: black;" class="form-label">Data limite do aluguel</label>
+                                        <input type="datetime-local" class="form-control" id="dataHoraInput" name="dataFinal" value="' . $item->dataFinal . '">
                                         <div id="error-msg" style="color: red;"></div>
                                         </div>
+                                    </div>
+                                    <div class="row" style="height: auto;">
+                                    <div style="text-align: start;" class="form-group col-md-6 espaco ">
+                                        <label>Disponibilidade</label>
+                                        <select class="form-select" aria-label="Default select example" name="dispo" >
+                                        <option selected> ' . $ava . ' </option>
+                                        <option value="1">Disponível</option>
+                                        <option value="0">Indisponível</option>
+                                    </select>
+                                    </div>
                                     </div>
                                         </div>
                                         <div class="modal-footer">
