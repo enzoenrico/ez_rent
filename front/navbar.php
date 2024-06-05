@@ -45,16 +45,22 @@
 </style>
 
 <?php
-
 require_once('autoload.php');
 $logado = $_SESSION['logado'] ?? null;
+$itemActions = new ItemMethods();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $_SESSION['itemSearch'] = true;
   if (isset($_POST['itemSearch'])) {
     $pesquisa = $_POST['itemSearch'];
-    $itemActions = new ItemMethods();
     $_SESSION['searchResult'] = $itemActions->search_item($_POST['itemSearch']);
+  }
+  if (isset($_POST['toggleAvailability'])) {
+    $item_id = $_POST['itemId'];
+    $item = $itemActions->get_item($item_id);
+    $new_availability = !$item->get_available();
+    $itemActions->set_disponibilidade($item_id, $new_availability);
+    echo "O item '$item_id' agora está " . ($new_availability ? "disponível" : "indisponível") . "!!!";
   }
 } else {
   $_SESSION['itemSearch'] = false;

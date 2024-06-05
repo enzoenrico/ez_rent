@@ -34,6 +34,15 @@ class Item
     public function get_data_final() {
         return $this->dataFinal;
     }
+    public function set_available($available)
+    {
+        $this->available = $available;
+    }
+
+    public function get_available()
+    {
+        return $this->available;
+    }
 }
 
 class ItemMethods
@@ -269,6 +278,13 @@ class ItemMethods
         } else {
             $res = new Error('No results found.');
         }
+    }
+    public function set_disponibilidade(int $id_item, bool $disponibilidade)
+    {
+        include 'C:\xampp\htdocs\ez_rent\back\connection.php';
+        $stmt = $conn->prepare("UPDATE Item SET available = ? WHERE id_item = ?;");
+        $stmt->bind_param('ii', $disponibilidade, $id_item);
+        return $stmt->execute();
     }
 }
 class Locador
