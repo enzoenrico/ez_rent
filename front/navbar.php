@@ -53,6 +53,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $_SESSION['itemSearch'] = true;
   if (isset($_POST['itemSearch'])) {
     $pesquisa = $_POST['itemSearch'];
+    if (!empty($pesquisa)) { // verifica se a pesquisa não está vazia
+      $_SESSION['searchResult'] = $itemActions->search_item($pesquisa);
+    } else {
+      echo "Por favor, insira um termo de pesquisa válido.";
+    }
     $_SESSION['searchResult'] = $itemActions->search_item($_POST['itemSearch']);
   }
   if (isset($_POST['toggleAvailability'])) {
