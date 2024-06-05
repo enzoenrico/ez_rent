@@ -234,7 +234,7 @@ if (isset($_POST['tirarcarrinho'])) {
               <div class="card-body">
               <h5 class="card-title" style="text-transform: uppercase;" name="nomeItem">' . $item->name . '</h5>
               <div  style="margin-bottom: 20px;">
-              <p style="margin: 0;"">Valor do aluguel: </p>
+              <p style="margin: 0;"">Valor diário do aluguel: </p>
               <strong class="card-text" name="valorItem">R$' . $item->value . '</strong>
               </div>
               <div style="margin-bottom: 20px;">
